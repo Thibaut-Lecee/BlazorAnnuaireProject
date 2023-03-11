@@ -4641,24 +4641,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Thibaut\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\lecee\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\BlazorAnnuaireProject\\Server\\BlazorAnnuaireProject.Server.csproj",
+      "projectUniqueName": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Server\\BlazorAnnuaireProject.Server.csproj",
       "projectName": "BlazorAnnuaireProject.Server",
-      "projectPath": "G:\\BlazorAnnuaireProject\\Server\\BlazorAnnuaireProject.Server.csproj",
-      "packagesPath": "C:\\Users\\Thibaut\\.nuget\\packages\\",
-      "outputPath": "G:\\BlazorAnnuaireProject\\Server\\obj\\",
+      "projectPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Server\\BlazorAnnuaireProject.Server.csproj",
+      "packagesPath": "C:\\Users\\lecee\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Server\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Thibaut\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\lecee\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4672,11 +4667,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "G:\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj": {
-              "projectPath": "G:\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj"
+            "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj": {
+              "projectPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj"
             },
-            "G:\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj": {
-              "projectPath": "G:\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj"
+            "C:\\Users\\lecee\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj": {
+              "projectPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj"
             }
           }
         }
@@ -4749,7 +4744,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }
