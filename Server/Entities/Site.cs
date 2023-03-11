@@ -7,6 +7,11 @@ public class Site {
     public string Ville { get; set; }
     public string Description { get; set; }
 
-    // association avec les services
-    public List<Services> Services { get; set; }
+    // association avec les salariés
+    public ICollection<Salaries> Salaries { get; set; }
+
+    public ICollection<Services> Services { get; set; }
+
+
+
 }

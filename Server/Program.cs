@@ -1,9 +1,7 @@
-using System.Reflection;
 using System.Text.Json.Serialization;
 using BlazorAnnuaireProject.Context;
 using BlazorAnnuaireProject.Helpers;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -33,6 +31,8 @@ builder.Services.AddSwaggerGen(options =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
+    
+
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
