@@ -7,6 +7,9 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using BlazorAnnuaireProject.AnnuaireServices.SalarieService;
+using BlazorAnnuaireProject.AnnuaireServices.SiteService;
+using BlazorAnnuaireProject.AnnuaireServices.ServiceService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<ISalarieService, SalarieService>();
+builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 //Db context
 builder.Services.AddDbContext<DataContext>(options =>
@@ -31,7 +37,7 @@ builder.Services.AddSwaggerGen(options =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-    
+
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
