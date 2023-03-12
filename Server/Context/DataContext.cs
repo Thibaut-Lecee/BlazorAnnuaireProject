@@ -15,13 +15,13 @@ public class DataContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Admin>().HasOne(u => u.RefreshToken).WithOne(rt => rt.Admin).HasForeignKey<RefreshToken>(rt => rt.AdminId).OnDelete(DeleteBehavior.Cascade);
-        
+
         modelBuilder.ApplyConfiguration(new RoleEntityConfiguration());
-           modelBuilder.ApplyConfiguration(new ServicesEntityConfiguration());
-    modelBuilder.ApplyConfiguration(new SitesEntityConfiguration());
-    modelBuilder.ApplyConfiguration(new SalariesEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new ServicesEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new SitesEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new SalariesEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AdminEntityConfiguration());
-        
+
     }
 
     public DbSet<Site> Sites { get; set; }

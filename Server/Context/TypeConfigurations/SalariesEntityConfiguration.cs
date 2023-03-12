@@ -2,8 +2,8 @@ namespace BlazorAnnuaireProject.Context.TypeConfigurations;
 using BlazorAnnuaireProject.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Collections.Generic;
 using Bogus;
+using System.Linq;
 
 public class ServicesEntityConfiguration : IEntityTypeConfiguration<Services>
 {
@@ -11,7 +11,6 @@ public class ServicesEntityConfiguration : IEntityTypeConfiguration<Services>
     {
         builder.ToTable("Services");
         builder.HasKey(s => s.Id);
-
         builder.HasData(
             new Services { Id = 1, Nom = "Comptabilité" },
             new Services { Id = 2, Nom = "Production" },
@@ -46,19 +45,21 @@ public class SalariesEntityConfiguration : IEntityTypeConfiguration<Salaries>
         builder.ToTable("Salaries");
         builder.HasKey(s => s.Id);
 
-        var faker = new Faker();
+        var faker = new Faker(locale: "fr");
 
         builder.HasData(Enumerable.Range(1, 1000).Select(i =>
             {
                 var serviceId = faker.Random.Int(1, 5);
                 var siteId = faker.Random.Int(1, 5);
-
+                var prenom = faker.Name.FirstName();
+                var nom = faker.Name.LastName();
+                var email = faker.Internet.Email(prenom, nom);
                 return new Salaries
                 {
                     Id = i + 100,
-                    Nom = faker.Name.LastName(),
-                    Prenom = faker.Name.FirstName(),
-                    Email = faker.Internet.Email(),
+                    Nom = nom,
+                    Prenom = prenom,
+                    Email = email,
                     TelephoneFixe = faker.Phone.PhoneNumber(),
                     TelephonePortable = faker.Phone.PhoneNumber(),
                     ServiceId = serviceId,
@@ -66,10 +67,5 @@ public class SalariesEntityConfiguration : IEntityTypeConfiguration<Salaries>
                     CreatedAt = faker.Date.Past()
                 };
             }).ToArray());
-
-            builder.HasOne(s => s.Service)
-       .WithMany(s => s.Salaries)
-       .HasForeignKey(s => s.ServiceId);
-
     }
 }
