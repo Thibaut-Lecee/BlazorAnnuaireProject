@@ -1,13 +1,21 @@
 using Microsoft.EntityFrameworkCore;
 using BlazorAnnuaireProject.Entities;
 using BlazorAnnuaireProject.Context.TypeConfigurations;
+using BlazorAnnuaireProject.Models;
 
 namespace BlazorAnnuaireProject.Context;
 
 public class DataContext : DbContext
 {
     #region Constructors
-    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+
+    // on ajoute au dataContext la configuration pour pouvoir injecter la configuration dans le AdminEntityConfiguration
+    public DataContext(DbContextOptions<DataContext> options, AdminConfiguration configuration) : base(options)
+    {
+        Configuration = configuration;
+    }
+
+    public AdminConfiguration Configuration { get; }
 
     #endregion
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,7 +28,13 @@ public class DataContext : DbContext
         modelBuilder.ApplyConfiguration(new ServicesEntityConfiguration());
         modelBuilder.ApplyConfiguration(new SitesEntityConfiguration());
         modelBuilder.ApplyConfiguration(new SalariesEntityConfiguration());
-        modelBuilder.ApplyConfiguration(new AdminEntityConfiguration());
+
+        // permet d'injecter les données sensibles dans la base de données pour l'admin par le appsettings.json
+        modelBuilder.ApplyConfiguration(new AdminEntityConfiguration(new AdminConfiguration
+        {
+            Email = Configuration.Email,
+            Password = Configuration.Password
+        }));
 
     }
 

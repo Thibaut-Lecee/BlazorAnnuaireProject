@@ -1,14 +1,21 @@
 using BlazorAnnuaireProject.Entities;
 using Microsoft.EntityFrameworkCore;
+using BlazorAnnuaireProject.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace BlazorAnnuaireProject.Context.TypeConfigurations;
 class AdminEntityConfiguration : IEntityTypeConfiguration<Admin>
 {
+    private readonly AdminConfiguration _adminConfig;
 
+    // on crée un constructeur pour pouvoir injecter la configuration afin de cacher les données sensibles pour l'admin
+    public AdminEntityConfiguration(AdminConfiguration adminConfig)
+    {
+        _adminConfig = adminConfig;
+    }
     public void Configure(EntityTypeBuilder<Admin> builder)
     {
 
-        var password = BCrypt.Net.BCrypt.HashPassword("Admin");
+
         builder.ToTable("Admins");
         builder.HasKey(admin => admin.AdminId);
         builder.HasData(new Admin
@@ -16,13 +23,11 @@ class AdminEntityConfiguration : IEntityTypeConfiguration<Admin>
             AdminId = 1,
             Nom = "Admin",
             Prenom = "Admin",
-            Email = "leceethibaut@gmail.com",
-            PasswordHash = password,
+            Email = _adminConfig.Email,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(_adminConfig.Password),
             RoleId = 1,
 
         });
-
-
     }
 }
 

@@ -9,6 +9,8 @@
       "BlazorAnnuaireProject.Server/1.0.0": {
         "dependencies": {
           "AutoMapper": "12.0.1",
+          "AutoMapper.Collection.EntityFrameworkCore": "9.0.0",
+          "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.0",
           "BCrypt.Net-Next": "4.0.3",
           "BlazorAnnuaireProject.Client": "1.0.0",
           "BlazorAnnuaireProject.Shared": "1.0.0",
@@ -35,6 +37,53 @@
           "lib/netstandard2.1/AutoMapper.dll": {
             "assemblyVersion": "12.0.0.0",
             "fileVersion": "12.0.1.0"
+          }
+        }
+      },
+      "AutoMapper.Collection/9.0.0": {
+        "dependencies": {
+          "AutoMapper": "12.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.1/AutoMapper.Collection.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.0.0"
+          }
+        }
+      },
+      "AutoMapper.Collection.EntityFrameworkCore/9.0.0": {
+        "dependencies": {
+          "AutoMapper.Collection": "9.0.0",
+          "AutoMapper.Extensions.ExpressionMapping": "6.0.0",
+          "Microsoft.EntityFrameworkCore": "8.0.0-preview.1.23111.4"
+        },
+        "runtime": {
+          "lib/net6.0/AutoMapper.Collection.EntityFrameworkCore.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.0.0"
+          }
+        }
+      },
+      "AutoMapper.Extensions.ExpressionMapping/6.0.0": {
+        "dependencies": {
+          "AutoMapper": "12.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.1/AutoMapper.Extensions.ExpressionMapping.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.0"
+          }
+        }
+      },
+      "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.0": {
+        "dependencies": {
+          "AutoMapper": "12.0.1",
+          "Microsoft.Extensions.Options": "8.0.0-preview.1.23110.8"
+        },
+        "runtime": {
+          "lib/netstandard2.1/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.0.0"
           }
         }
       },
@@ -1052,6 +1101,34 @@
       "sha512": "sha512-hvV62vl6Hp/WfQ24yzo3Co9+OPl8wH8hApwVtgWpiAynVJkUcs7xvehnSftawL8Pe8FrPffBRM3hwzLQqWDNjA==",
       "path": "automapper/12.0.1",
       "hashPath": "automapper.12.0.1.nupkg.sha512"
+    },
+    "AutoMapper.Collection/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tFsFFNrf1Z3TBi8XqAlKWemjYeUyaoiNqCPXsCatVZXd3sC/HCF0/tIkld6GBljF2oPZTO+EckyMGZh1jn85zQ==",
+      "path": "automapper.collection/9.0.0",
+      "hashPath": "automapper.collection.9.0.0.nupkg.sha512"
+    },
+    "AutoMapper.Collection.EntityFrameworkCore/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rOb6sNSK63QxfPEgVsrJSONIqVUmpAdsfT+CLgSD8AZ+AOt+e8d9h3dM+eS/bBCdDNZHMvCdcbhEb7nlBN+mjA==",
+      "path": "automapper.collection.entityframeworkcore/9.0.0",
+      "hashPath": "automapper.collection.entityframeworkcore.9.0.0.nupkg.sha512"
+    },
+    "AutoMapper.Extensions.ExpressionMapping/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JUhZ6L8WiGulR+nckAB105uQpk37KVkpUyQC564plhENO/r8KWVL5Ty6zexHrRf3vsoox5h6b4/HgyQlA4PrDg==",
+      "path": "automapper.extensions.expressionmapping/6.0.0",
+      "hashPath": "automapper.extensions.expressionmapping.6.0.0.nupkg.sha512"
+    },
+    "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XCJ4E3oKrbRl1qY9Mr+7uyC0xZj1+bqQjmQRWTiTKiVuuXTny+7YFWHi20tPjwkMukLbicN6yGlDy5PZ4wyi1w==",
+      "path": "automapper.extensions.microsoft.dependencyinjection/12.0.0",
+      "hashPath": "automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512"
     },
     "Azure.Core/1.25.0": {
       "type": "package",

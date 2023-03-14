@@ -18,6 +18,61 @@
           }
         }
       },
+      "AutoMapper.Collection/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "AutoMapper": "[12.0.0, 13.0.0)"
+        },
+        "compile": {
+          "lib/netstandard2.1/AutoMapper.Collection.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/AutoMapper.Collection.dll": {}
+        }
+      },
+      "AutoMapper.Collection.EntityFrameworkCore/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "AutoMapper.Collection": "[9.0.0, 10.0.0)",
+          "AutoMapper.Extensions.ExpressionMapping": "[6.0.0, 7.0.0)",
+          "Microsoft.EntityFrameworkCore": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/AutoMapper.Collection.EntityFrameworkCore.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/AutoMapper.Collection.EntityFrameworkCore.dll": {}
+        }
+      },
+      "AutoMapper.Extensions.ExpressionMapping/6.0.0": {
+        "type": "package",
+        "dependencies": {
+          "AutoMapper": "[12.0.0, 13.0.0)"
+        },
+        "compile": {
+          "lib/netstandard2.1/AutoMapper.Extensions.ExpressionMapping.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/AutoMapper.Extensions.ExpressionMapping.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.0": {
+        "type": "package",
+        "dependencies": {
+          "AutoMapper": "12.0.0",
+          "Microsoft.Extensions.Options": "6.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
+        }
+      },
       "Azure.Core/1.25.0": {
         "type": "package",
         "dependencies": {
@@ -1752,6 +1807,61 @@
         "icon.png",
         "lib/netstandard2.1/AutoMapper.dll",
         "lib/netstandard2.1/AutoMapper.xml"
+      ]
+    },
+    "AutoMapper.Collection/9.0.0": {
+      "sha512": "tFsFFNrf1Z3TBi8XqAlKWemjYeUyaoiNqCPXsCatVZXd3sC/HCF0/tIkld6GBljF2oPZTO+EckyMGZh1jn85zQ==",
+      "type": "package",
+      "path": "automapper.collection/9.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "automapper.collection.9.0.0.nupkg.sha512",
+        "automapper.collection.nuspec",
+        "icon.png",
+        "lib/netstandard2.1/AutoMapper.Collection.dll"
+      ]
+    },
+    "AutoMapper.Collection.EntityFrameworkCore/9.0.0": {
+      "sha512": "rOb6sNSK63QxfPEgVsrJSONIqVUmpAdsfT+CLgSD8AZ+AOt+e8d9h3dM+eS/bBCdDNZHMvCdcbhEb7nlBN+mjA==",
+      "type": "package",
+      "path": "automapper.collection.entityframeworkcore/9.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "automapper.collection.entityframeworkcore.9.0.0.nupkg.sha512",
+        "automapper.collection.entityframeworkcore.nuspec",
+        "icon.png",
+        "lib/net6.0/AutoMapper.Collection.EntityFrameworkCore.dll",
+        "lib/netstandard2.1/AutoMapper.Collection.EntityFrameworkCore.dll"
+      ]
+    },
+    "AutoMapper.Extensions.ExpressionMapping/6.0.0": {
+      "sha512": "JUhZ6L8WiGulR+nckAB105uQpk37KVkpUyQC564plhENO/r8KWVL5Ty6zexHrRf3vsoox5h6b4/HgyQlA4PrDg==",
+      "type": "package",
+      "path": "automapper.extensions.expressionmapping/6.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "automapper.extensions.expressionmapping.6.0.0.nupkg.sha512",
+        "automapper.extensions.expressionmapping.nuspec",
+        "icon.png",
+        "lib/netstandard2.1/AutoMapper.Extensions.ExpressionMapping.dll",
+        "lib/netstandard2.1/AutoMapper.Extensions.ExpressionMapping.xml"
+      ]
+    },
+    "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.0": {
+      "sha512": "XCJ4E3oKrbRl1qY9Mr+7uyC0xZj1+bqQjmQRWTiTKiVuuXTny+7YFWHi20tPjwkMukLbicN6yGlDy5PZ4wyi1w==",
+      "type": "package",
+      "path": "automapper.extensions.microsoft.dependencyinjection/12.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
+        "automapper.extensions.microsoft.dependencyinjection.nuspec",
+        "icon.png",
+        "lib/netstandard2.1/AutoMapper.Extensions.Microsoft.DependencyInjection.dll"
       ]
     },
     "Azure.Core/1.25.0": {
@@ -4883,6 +4993,8 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "AutoMapper >= 12.0.1",
+      "AutoMapper.Collection.EntityFrameworkCore >= 9.0.0",
+      "AutoMapper.Extensions.Microsoft.DependencyInjection >= 12.0.0",
       "BCrypt.Net-Next >= 4.0.3",
       "BlazorAnnuaireProject.Client >= 1.0.0",
       "BlazorAnnuaireProject.Shared >= 1.0.0",
@@ -4899,19 +5011,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lecee\\.nuget\\packages\\": {}
+    "C:\\Users\\Thibaut\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Server\\BlazorAnnuaireProject.Server.csproj",
+      "projectUniqueName": "G:\\BlazorAnnuaireProject\\Server\\BlazorAnnuaireProject.Server.csproj",
       "projectName": "BlazorAnnuaireProject.Server",
-      "projectPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Server\\BlazorAnnuaireProject.Server.csproj",
-      "packagesPath": "C:\\Users\\lecee\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Server\\obj\\",
+      "projectPath": "G:\\BlazorAnnuaireProject\\Server\\BlazorAnnuaireProject.Server.csproj",
+      "packagesPath": "C:\\Users\\Thibaut\\.nuget\\packages\\",
+      "outputPath": "G:\\BlazorAnnuaireProject\\Server\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\lecee\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Thibaut\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4925,11 +5042,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj": {
-              "projectPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj"
+            "G:\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj": {
+              "projectPath": "G:\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj"
             },
-            "C:\\Users\\lecee\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj": {
-              "projectPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj"
+            "G:\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj": {
+              "projectPath": "G:\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj"
             }
           }
         }
@@ -4947,6 +5064,14 @@
           "AutoMapper": {
             "target": "Package",
             "version": "[12.0.1, )"
+          },
+          "AutoMapper.Collection.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[9.0.0, )"
+          },
+          "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+            "target": "Package",
+            "version": "[12.0.0, )"
           },
           "BCrypt.Net-Next": {
             "target": "Package",
@@ -5014,7 +5139,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
       }
     }
   }

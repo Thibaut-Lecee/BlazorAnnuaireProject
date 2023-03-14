@@ -8,7 +8,7 @@ public class AutoMapperProfile: Profile {
 public AutoMapperProfile() {
     CreateMap<Admin, AuthenticateResponse>();
     
-
+    CreateMap<RegisterRequest, Salaries>();
 
 }
 
