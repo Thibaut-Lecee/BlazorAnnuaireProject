@@ -31,7 +31,7 @@ namespace BlazorAnnuaireProject.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetServiceById(int id)
+        public async Task<IActionResult> GetServiceByVille(int id)
         {
             var service = await _serviceService.GetServiceById(id);
             return Ok(service);

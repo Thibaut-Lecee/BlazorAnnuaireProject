@@ -43,28 +43,7 @@ namespace BlazorAnnuaireProject.Controllers
             return Ok(salarie);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateSalaries(Salaries salarie)
-        {
-            var newSalarie = await _salarieService.CreateSalaries(salarie);
-            return Ok(newSalarie);
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateSalaries(Salaries salarie)
-        {
-            await _salarieService.UpdateSalaries(salarie);
-            return Ok("Salarie updated");
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSalaries(int id)
-        {
-            await _salarieService.DeleteSalaries(id);
-            return Ok("Salarie deleted");
-        }
-
-
     }
+
 }
 

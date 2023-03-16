@@ -15,10 +15,17 @@ public class SalarieService : ISalarieService
         _context = context;
     }
 
-    public async Task<List<Salaries>> GetAllSalaries()
+    public async Task<List<Salaries>> GetAllSalariesWithAssociations()
     {
         return await _context.Salaries.Include(s => s.Service).Include(s => s.Site).ToListAsync();
     }
+
+    public async Task<List<Salaries>> GetAllSalaries()
+    {
+        return await _context.Salaries.ToListAsync();
+    }
+
+
 
     public async Task<Salaries> GetSalariesById(int id)
     {
@@ -32,23 +39,6 @@ public class SalarieService : ISalarieService
         return salary;
     }
 
-    public async Task<int> CreateSalaries(Salaries salaries)
-    {
-        _context.Salaries.Add(salaries);
-        await _context.SaveChangesAsync();
-        return salaries.Id;
-    }
+    
 
-    public async Task UpdateSalaries(Salaries salaries)
-    {
-        _context.Entry(salaries).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task DeleteSalaries(int id)
-    {
-        var salaries = await _context.Salaries.FindAsync(id);
-        _context.Salaries.Remove(salaries);
-        await _context.SaveChangesAsync();
-    }
 }

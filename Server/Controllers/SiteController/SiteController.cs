@@ -1,7 +1,6 @@
-
-
 using BlazorAnnuaireProject.Context;
 using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorAnnuaireProject.Controllers
@@ -30,32 +29,78 @@ namespace BlazorAnnuaireProject.Controllers
             return Ok(sites);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetSiteById(int id)
+        [HttpGet("withSalaries")]
+        public async Task<IActionResult> GetAllSitesWithSalaries()
         {
-            var site = await _siteService.GetSiteById(id);
+            var sites = await _siteService.GetAllSitesWithSalaries();
+            return Ok(sites);
+        }
+
+        [HttpGet("withServices")]
+        public async Task<IActionResult> GetAllSiteWithServices()
+        {
+            var sites = await _siteService.GetAllSiteWithServices();
+            return Ok(sites);
+        }
+
+        [HttpGet("withSalariesAndServices")]
+        public async Task<IActionResult> GetAllSiteWithSalariesAndServices()
+        {
+            var sites = await _siteService.GetAllSiteWithSalariesAndServices();
+            return Ok(sites);
+        }
+
+        [HttpGet("withSalaries/{ville}")]
+        public async Task<IActionResult> GetSiteByNameAndSalaries(string ville)
+        {
+            var site = await _siteService.GetSiteByNameAndSalaries(ville);
+            return Ok(site);
+        }
+
+        [HttpGet("withServices/{ville}")]
+        public async Task<IActionResult> GetSiteByNameAndServices(string ville)
+        {
+            var site = await _siteService.GetSiteByNameAndServices(ville);
+            return Ok(site);
+        }
+
+        [HttpGet("withSalariesAndServices/{ville}")]
+        public async Task<IActionResult> GetSiteByNameAndSalariesAndServices(string ville)
+        {
+            var site = await _siteService.GetSiteByNameAndSalariesAndServices(ville);
+
+            return Ok(site);
+        }
+
+
+        [HttpGet("{ville}")]
+        public async Task<IActionResult> GetSiteByName(string ville)
+        {
+            var site = await _siteService.GetSiteByName(ville);
             return Ok(site);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSite(Site site)
+        public IActionResult CreateSite([FromBody] CreateSiteRequest site)
         {
-            var newSite = await _siteService.CreateSite(site);
-            return Ok(newSite);
+            var newSite = _siteService.CreateSite(site);
+            return StatusCode(201, new { message = "Site created", newSite });
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateSite(Site site)
+
+        [HttpPut("{ville}")]
+        public IActionResult UpdateSite([FromBody] UpdateRequest site, string ville)
         {
-            await _siteService.UpdateSite(site);
-            return Ok("Site updated");
+            var newSite = _siteService.UpdateSite(site, ville);
+            return StatusCode(201, new { message = "Site updated", newSite });
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSite(int id)
+
+        [HttpDelete("{ville}")]
+        public IActionResult DeleteSite(string ville)
         {
-            await _siteService.DeleteSite(id);
-            return Ok("Site deleted");
+            var removedSite = _siteService.DeleteSite(ville);
+            return Ok(new { message = "Site deleted", removedSite });
         }
 
 

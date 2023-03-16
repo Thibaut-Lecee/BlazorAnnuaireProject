@@ -39,6 +39,14 @@ namespace BlazorAnnuaireProject.Controllers
             }
             return StatusCode(200, response);
         }
+
+        [HttpPost("Register")]
+
+        public IActionResult Register([FromBody] RegisterRequest request)
+        {
+            _adminService.RegisterSalaries(request);
+            return StatusCode(201, "Salarie created successfully");
+        }
         private void SetTokenCookie(string token, int id, string refreshToken, DateTime tokenExpires, DateTime newTokenExpires)
         {
             // append cookie with refresh token to the http response

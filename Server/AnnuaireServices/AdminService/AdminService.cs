@@ -63,9 +63,7 @@ public class AdminService : IAdminService
         register.CreatedAt = DateTime.UtcNow;
         _context.Salaries.Add(register);
         _context.SaveChanges();
-
-
-
+        
     }
 
     public Admin GetAdminByRefreshToken(string token)

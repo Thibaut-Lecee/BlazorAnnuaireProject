@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace BlazorAnnuaireProject.Entities;
 
 public class Salaries
@@ -11,11 +13,11 @@ public class Salaries
     public string? TelephonePortable { get; set; }
 
     //1ère association avec le Service  (1 salarié = 1 service)
-    public int ServiceId { get; set; }
+    [JsonIgnore] public int ServiceId { get; set; }
     public Services Service { get; set; }
 
     // 2ème association avec le site  (1 salarié = 1 site)
-    public int SiteId { get; set; }
+    [JsonIgnore] public int SiteId { get; set; }
     public Site Site { get; set; }
 
 }
