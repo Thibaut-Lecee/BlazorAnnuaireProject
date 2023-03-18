@@ -7,11 +7,8 @@ public interface ISiteService
     Task<List<Site>> GetAllSites();
     Task<List<Site>> GetAllSitesWithSalaries();
 
-    Task<List<Site>> GetAllSiteWithServices();
 
-    Task<List<Site>> GetAllSiteWithSalariesAndServices();
-
-    Task<Site> GetSiteByNameAndServices(string ville);
+    List<Site> GetSitesWithServices(string ville);
     Task<Site> GetSiteByNameAndSalaries(string ville);
     Task<Site> GetSiteByNameAndSalariesAndServices(string ville);
     Task<Site> GetSiteByName(string ville);

@@ -28,25 +28,69 @@ public class SiteService : ISiteService
         return await _context.Sites.Include(s => s.Salaries).ToListAsync();
     }
 
-    public async Task<List<Site>> GetAllSiteWithServices()
-    {
-        return await _context.Sites.Include(s => s.Services).ToListAsync();
-    }
-
-    public async Task<List<Site>> GetAllSiteWithSalariesAndServices()
-    {
-        return await _context.Sites.Include(s => s.Salaries).Include(s => s.Services).ToListAsync();
-    }
 
     public async Task<Site> GetSiteByName(string ville)
     {
         return await _context.Sites.FirstOrDefaultAsync(s => s.Ville == ville);
     }
 
-    public async Task<Site> GetSiteByNameAndServices(string ville)
+    public List<Site> GetSitesWithServices(string ville)
     {
-        return await _context.Sites.Include(s => s.Services).FirstOrDefaultAsync(s => s.Ville == ville);
+        var sites = _context.Sites
+            .Where(s => s.Ville == ville)
+            .AsSplitQuery()
+            .Include(s => s.SiteAndServices)
+                .ThenInclude(ss => ss.Service)
+            .AsSingleQuery()
+            .ToList();
+
+        var siteIds = sites.Select(s => s.Id).ToList();
+
+        var salaries = _context.Salaries
+            .Where(s => siteIds.Contains(s.SiteId))
+            .Select(s => new
+            {
+                SiteId = s.SiteId,
+                SalarieId = s.Id,
+                Nom = s.Nom,
+                Prenom = s.Prenom,
+                Email = s.Email,
+                CreatedAt = s.CreatedAt,
+                TelephoneFixe = s.TelephoneFixe,
+                TelephonePortable = s.TelephonePortable,
+                ServiceNom = s.Service.Nom,
+                SiteVille = s.Site.Ville,
+                SiteDescription = s.Site.Description
+            })
+            .ToList();
+
+        foreach (var site in sites)
+        {
+            var siteSalaries = salaries.Where(s => s.SiteId == site.Id).ToList();
+            foreach (var service in site.SiteAndServices)
+            {
+                var serviceSalaries = siteSalaries
+                    .Where(s => s.ServiceNom == service.Service.Nom)
+                    .Select(s => new Salaries
+                    {
+                        Id = s.SalarieId,
+                        Nom = s.Nom,
+                        Prenom = s.Prenom,
+                        Email = s.Email,
+                        CreatedAt = s.CreatedAt,
+                        TelephoneFixe = s.TelephoneFixe,
+                        TelephonePortable = s.TelephonePortable,
+                        Service = new Services { Nom = s.ServiceNom },
+                        Site = new Site { Id = site.Id, Ville = s.SiteVille, Description = s.SiteDescription }
+                    })
+                    .ToList();
+                service.Service.Salaries = serviceSalaries.Count > 0 ? serviceSalaries : null;
+            }
+        }
+
+        return sites;
     }
+
 
     public async Task<Site> GetSiteByNameAndSalaries(string ville)
     {
@@ -106,14 +150,14 @@ public class SiteService : ISiteService
         bool modified = false;
 
         // Vérifiez si le nom de la ville est différent de l'original et mettez à jour si nécessaire
-        if (!string.IsNullOrWhiteSpace(site.Ville) && site.Ville != existingSite.Ville && site.Ville != "" && site.Ville != "string")
+        if (!string.IsNullOrWhiteSpace(site.Ville) && site.Ville != existingSite.Ville && !string.IsNullOrEmpty(site.Ville) && site.Ville != "string")
         {
             existingSite.Ville = site.Ville;
             modified = true;
         }
 
         // Vérifiez si la description est différente de l'original et mettez à jour si nécessaire
-        if (!string.IsNullOrWhiteSpace(site.Description) && site.Description != existingSite.Description && site.Description != "" && site.Description != "string")
+        if (!string.IsNullOrWhiteSpace(site.Description) && site.Description != existingSite.Description && !string.IsNullOrEmpty(site.Description) && site.Description != "string")
         {
             existingSite.Description = site.Description;
             modified = true;

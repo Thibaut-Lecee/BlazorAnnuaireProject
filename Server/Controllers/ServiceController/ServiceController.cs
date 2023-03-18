@@ -1,9 +1,6 @@
-
-using BlazorAnnuaireProject.Entities;
 using Microsoft.AspNetCore.Mvc;
 using BlazorAnnuaireProject.Context;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using BlazorAnnuaireProject.Models;
 
 namespace BlazorAnnuaireProject.Controllers
 {
@@ -38,24 +35,33 @@ namespace BlazorAnnuaireProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateService(Services service)
+        public IActionResult CreateService([FromBody] CreateServiceRequest service)
         {
-            var newService = await _serviceService.CreateService(service);
-            return Ok(newService);
+            var newService = _serviceService.CreateService(service);
+            return StatusCode(201, new { message = "Service created", newService });
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateService(Services service)
+        // [HttpPost("{ville}")]
+        // public IActionResult CreateServiceOnSite([FromBody] CreateServiceRequest service, string ville)
+        // {
+        //     var newService = _serviceService.CreateServiceOnSite(service, ville);
+        //     return StatusCode(201, new { message = "Service created", newService });
+        // }
+
+
+        [HttpPut("{nom}")]
+        public IActionResult UpdateService([FromBody] UpdateServiceRequest service, string nom)
         {
-            await _serviceService.UpdateService(service);
-            return Ok("Service updated");
+            var updateService = _serviceService.UpdateService(service, nom);
+            return StatusCode(201, new { message = "Service updated", updateService });
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteService(int id)
+
+        [HttpDelete("{service}")]
+        public IActionResult DeleteService(string service)
         {
-            await _serviceService.DeleteService(id);
-            return Ok("Service deleted");
+            var removedSite = _serviceService.DeleteService(service);
+            return StatusCode(201, new { message = "Service deleted", removedSite });
         }
     }
 }

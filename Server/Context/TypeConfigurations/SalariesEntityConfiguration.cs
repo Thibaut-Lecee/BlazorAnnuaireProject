@@ -69,3 +69,43 @@ public class SalariesEntityConfiguration : IEntityTypeConfiguration<Salaries>
             }).ToArray());
     }
 }
+
+public class SiteServiceEntityConfiguration : IEntityTypeConfiguration<SiteAndService>
+{
+    public void Configure(EntityTypeBuilder<SiteAndService> builder)
+    {
+        builder.ToTable("SiteServices");
+
+        builder.HasKey(ss => new { ss.SiteId, ss.ServiceId });
+
+        builder.HasOne(ss => ss.Site)
+            .WithMany(s => s.SiteAndServices)
+            .HasForeignKey(ss => ss.SiteId);
+
+        builder.HasOne(ss => ss.Service)
+            .WithMany(s => s.SiteAndServices)
+            .HasForeignKey(ss => ss.ServiceId);
+
+        builder
+           .HasData(
+                new SiteAndService { SiteId = 1, ServiceId = 1 },
+                new SiteAndService { SiteId = 1, ServiceId = 2 },
+                new SiteAndService { SiteId = 1, ServiceId = 3 },
+                new SiteAndService { SiteId = 1, ServiceId = 4 },
+                new SiteAndService { SiteId = 1, ServiceId = 5 },
+                new SiteAndService { SiteId = 2, ServiceId = 2 },
+                new SiteAndService { SiteId = 2, ServiceId = 4 },
+                new SiteAndService { SiteId = 2, ServiceId = 5 },
+                new SiteAndService { SiteId = 3, ServiceId = 1 },
+                new SiteAndService { SiteId = 3, ServiceId = 3 },
+                new SiteAndService { SiteId = 3, ServiceId = 5 },
+                new SiteAndService { SiteId = 4, ServiceId = 2 },
+                new SiteAndService { SiteId = 4, ServiceId = 4 },
+                new SiteAndService { SiteId = 4, ServiceId = 5 },
+                new SiteAndService { SiteId = 5, ServiceId = 1 },
+                new SiteAndService { SiteId = 5, ServiceId = 2 },
+                new SiteAndService { SiteId = 5, ServiceId = 3 },
+                new SiteAndService { SiteId = 5, ServiceId = 4 }
+            );
+    }
+}

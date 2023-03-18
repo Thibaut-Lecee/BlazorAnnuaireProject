@@ -28,13 +28,15 @@ public class DataContext : DbContext
         modelBuilder.ApplyConfiguration(new ServicesEntityConfiguration());
         modelBuilder.ApplyConfiguration(new SitesEntityConfiguration());
         modelBuilder.ApplyConfiguration(new SalariesEntityConfiguration());
-
+        modelBuilder.ApplyConfiguration(new SiteServiceEntityConfiguration());
         // permet d'injecter les données sensibles dans la base de données pour l'admin par le appsettings.json
         modelBuilder.ApplyConfiguration(new AdminEntityConfiguration(new AdminConfiguration
         {
             Email = Configuration.Email,
             Password = Configuration.Password
         }));
+
+
 
     }
 
@@ -43,6 +45,7 @@ public class DataContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<Salaries> Salaries { get; set; }
     public DbSet<Admin> Admins { get; set; }
+    public DbSet<SiteAndService> SiteAndServices { get; set; }
     public DbSet<RefreshToken> RefreshToken { get; set; }
 
 

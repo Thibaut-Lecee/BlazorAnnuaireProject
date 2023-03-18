@@ -1,5 +1,3 @@
-
-
 using System.Text.Json.Serialization;
 
 namespace BlazorAnnuaireProject.Entities;
@@ -12,5 +10,7 @@ public class Services
     // association avec les salariés
 
     public ICollection<Salaries> Salaries { get; set; }
+
+    public ICollection<SiteAndService> SiteAndServices { get; set; }
 
 }

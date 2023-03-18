@@ -16,6 +16,9 @@ public class AutoMapperProfile : Profile
 
         CreateMap<CreateSiteRequest, Site>();
 
+        CreateMap<CreateServiceRequest, Services>();
+
+        CreateMap<Services, CreateServiceResponse>();
 
     }
 

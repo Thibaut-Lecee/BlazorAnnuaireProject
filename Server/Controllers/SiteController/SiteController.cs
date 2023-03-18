@@ -1,5 +1,4 @@
 using BlazorAnnuaireProject.Context;
-using BlazorAnnuaireProject.Entities;
 using BlazorAnnuaireProject.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,19 +35,9 @@ namespace BlazorAnnuaireProject.Controllers
             return Ok(sites);
         }
 
-        [HttpGet("withServices")]
-        public async Task<IActionResult> GetAllSiteWithServices()
-        {
-            var sites = await _siteService.GetAllSiteWithServices();
-            return Ok(sites);
-        }
 
-        [HttpGet("withSalariesAndServices")]
-        public async Task<IActionResult> GetAllSiteWithSalariesAndServices()
-        {
-            var sites = await _siteService.GetAllSiteWithSalariesAndServices();
-            return Ok(sites);
-        }
+
+
 
         [HttpGet("withSalaries/{ville}")]
         public async Task<IActionResult> GetSiteByNameAndSalaries(string ville)
@@ -58,11 +47,12 @@ namespace BlazorAnnuaireProject.Controllers
         }
 
         [HttpGet("withServices/{ville}")]
-        public async Task<IActionResult> GetSiteByNameAndServices(string ville)
+        public IActionResult GetSitesWithServices(string ville)
         {
-            var site = await _siteService.GetSiteByNameAndServices(ville);
-            return Ok(site);
+            var site = _siteService.GetSitesWithServices(ville);
+            return StatusCode(200, site);
         }
+
 
         [HttpGet("withSalariesAndServices/{ville}")]
         public async Task<IActionResult> GetSiteByNameAndSalariesAndServices(string ville)
