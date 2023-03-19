@@ -23,9 +23,32 @@ public class SiteService : ISiteService
     {
         return await _context.Sites.ToListAsync();
     }
-    public async Task<List<Site>> GetAllSitesWithSalaries()
+    public async Task<List<SiteWithSalariesDto>> GetAllSitesWithSalaries()
     {
-        return await _context.Sites.Include(s => s.Salaries).ToListAsync();
+        var sites = await _context.Sites
+             .Include(s => s.Salaries)
+             .Select(s => new SiteWithSalariesDto
+             {
+                 Id = s.Id,
+                 Ville = s.Ville,
+                 Description = s.Description,
+                 Salaries = s.Salaries
+                     .Select(ss => new SalariesDto
+                     {
+                         Id = ss.Id,
+                         Nom = ss.Nom,
+                         Prenom = ss.Prenom,
+                         Email = ss.Email,
+                         CreatedAt = ss.CreatedAt,
+                         TelephoneFixe = ss.TelephoneFixe,
+                         TelephonePortable = ss.TelephonePortable,
+                         Service = ss.Service.Nom,
+                         Site = ss.Site.Ville
+                     })
+                     .ToList()
+             })
+             .ToListAsync();
+        return sites;
     }
 
 
@@ -34,97 +57,99 @@ public class SiteService : ISiteService
         return await _context.Sites.FirstOrDefaultAsync(s => s.Ville == ville);
     }
 
-    public List<Site> GetSitesWithServices(string ville)
+    public async Task<List<SiteWithServicesDto>> GetSiteByNameAndServices(string ville)
     {
-        var sites = _context.Sites
+        var sites = await _context.Sites
             .Where(s => s.Ville == ville)
-            .AsSplitQuery()
             .Include(s => s.SiteAndServices)
                 .ThenInclude(ss => ss.Service)
-            .AsSingleQuery()
-            .ToList();
-
-        var siteIds = sites.Select(s => s.Id).ToList();
-
-        var salaries = _context.Salaries
-            .Where(s => siteIds.Contains(s.SiteId))
-            .Select(s => new
+            .Select(s => new SiteWithServicesDto
             {
-                SiteId = s.SiteId,
-                SalarieId = s.Id,
-                Nom = s.Nom,
-                Prenom = s.Prenom,
-                Email = s.Email,
-                CreatedAt = s.CreatedAt,
-                TelephoneFixe = s.TelephoneFixe,
-                TelephonePortable = s.TelephonePortable,
-                ServiceNom = s.Service.Nom,
-                SiteVille = s.Site.Ville,
-                SiteDescription = s.Site.Description
-            })
-            .ToList();
-
-        foreach (var site in sites)
-        {
-            var siteSalaries = salaries.Where(s => s.SiteId == site.Id).ToList();
-            foreach (var service in site.SiteAndServices)
-            {
-                var serviceSalaries = siteSalaries
-                    .Where(s => s.ServiceNom == service.Service.Nom)
-                    .Select(s => new Salaries
+                Id = s.Id,
+                Ville = s.Ville,
+                Description = s.Description,
+                Services = s.SiteAndServices
+                    .Select(ss => new ServiceDto
                     {
-                        Id = s.SalarieId,
-                        Nom = s.Nom,
-                        Prenom = s.Prenom,
-                        Email = s.Email,
-                        CreatedAt = s.CreatedAt,
-                        TelephoneFixe = s.TelephoneFixe,
-                        TelephonePortable = s.TelephonePortable,
-                        Service = new Services { Nom = s.ServiceNom },
-                        Site = new Site { Id = site.Id, Ville = s.SiteVille, Description = s.SiteDescription }
+                        Id = ss.Service.Id,
+                        Nom = ss.Service.Nom
                     })
-                    .ToList();
-                service.Service.Salaries = serviceSalaries.Count > 0 ? serviceSalaries : null;
-            }
-        }
+                    .ToList()
+            })
+            .ToListAsync();
+
+        return sites;
+    }
+
+    public async Task<List<SiteWithSalariesDto>> GetSiteByNameAndSalaries(string ville)
+    {
+        var sites = await _context.Sites
+            .Where(s => s.Ville == ville)
+            .Include(s => s.Salaries)
+            .Select(s => new SiteWithSalariesDto
+            {
+                Id = s.Id,
+                Ville = s.Ville,
+                Description = s.Description,
+                Salaries = s.Salaries
+                    .Select(ss => new SalariesDto
+                    {
+                        Id = ss.Id,
+                        Nom = ss.Nom,
+                        Prenom = ss.Prenom,
+                        Email = ss.Email,
+                        CreatedAt = ss.CreatedAt,
+                        TelephoneFixe = ss.TelephoneFixe,
+                        TelephonePortable = ss.TelephonePortable,
+                        Service = ss.Service.Nom,
+                        Site = ss.Site.Ville
+                    })
+                    .ToList()
+            })
+            .ToListAsync();
 
         return sites;
     }
 
 
-    public async Task<Site> GetSiteByNameAndSalaries(string ville)
+    public async Task<List<SiteWithSalariesDto>> GetSiteByNameAndSalariesAndServices(string ville)
     {
-        return await _context.Sites.Include(s => s.Salaries).FirstOrDefaultAsync(s => s.Ville == ville);
-    }
 
-    public async Task<Site> GetSiteByNameAndSalariesAndServices(string ville)
-    {
-        var site = await _context.Sites
+        var sites = await _context.Sites
             .Where(s => s.Ville == ville)
             .Include(s => s.Salaries)
-                .ThenInclude(s => s.Service)
-            .FirstOrDefaultAsync();
+            .Include(s => s.SiteAndServices)
+                .ThenInclude(ss => ss.Service)
+            .Select(s => new SiteWithSalariesDto
+            {
+                Id = s.Id,
+                Ville = s.Ville,
+                Description = s.Description,
+                Salaries = s.Salaries
+                    .Select(ss => new SalariesDto
+                    {
+                        Id = ss.Id,
+                        Nom = ss.Nom,
+                        Prenom = ss.Prenom,
+                        Email = ss.Email,
+                        CreatedAt = ss.CreatedAt,
+                        TelephoneFixe = ss.TelephoneFixe,
+                        TelephonePortable = ss.TelephonePortable,
+                        Service = ss.Service.Nom,
+                        Site = ss.Site.Ville
+                    })
+                    .ToList(),
 
-        if (site == null)
-        {
-            throw new AppException("Le site n'a pas été trouvé");
-        }
+            })
+            .ToListAsync();
 
-        site.Salaries = site.Salaries.Select(s => new Salaries
-        {
-            Id = s.Id,
-            Nom = s.Nom,
-            Prenom = s.Prenom,
-            Email = s.Email,
-            CreatedAt = s.CreatedAt,
-            TelephoneFixe = s.TelephoneFixe,
-            TelephonePortable = s.TelephonePortable,
-            Service = new Services { Nom = s.Service.Nom },
-            Site = s.Site != null ? new Site { Id = s.Site.Id, Ville = s.Site.Ville, Description = s.Site.Description } : null
-        }).ToList();
+        return sites;
 
-        return site;
     }
+
+
+
+
 
     public CreateSiteResponse CreateSite(CreateSiteRequest site)
     {

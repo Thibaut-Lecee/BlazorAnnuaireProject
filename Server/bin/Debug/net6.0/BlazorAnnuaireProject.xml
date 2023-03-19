@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BlazorAnnuaireProject.Server</name>
+    </assembly>
+    <members>
+        <member name="M:BlazorAnnuaireProject.Controllers.SiteController.GetAllSites">
+            <summary>
+            Récupère la liste des services d'un site.
+            </summary>
+        </member>
+        <member name="M:BlazorAnnuaireProject.Controllers.SiteController.GetAllSitesWithSalaries">
+            <summary>
+            Récupère la liste des salaries pour tous les sites.
+            </summary>
+        </member>
+        <member name="T:BlazorAnnuaireProject.Server.Migrations.InitialMigration">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.InitialMigration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.InitialMigration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.InitialMigration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:BlazorAnnuaireProject.Server.Migrations.changementFKServiceSite">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.changementFKServiceSite.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.changementFKServiceSite.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.changementFKServiceSite.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:BlazorAnnuaireProject.Server.Migrations.TableUpdated">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.TableUpdated.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.TableUpdated.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.TableUpdated.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:BlazorAnnuaireProject.Server.Migrations.TableUpdatedAvecContext">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.TableUpdatedAvecContext.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.TableUpdatedAvecContext.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.TableUpdatedAvecContext.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:BlazorAnnuaireProject.Server.Migrations.TableUpdatedAvecContextData">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.TableUpdatedAvecContextData.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.TableUpdatedAvecContextData.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.TableUpdatedAvecContextData.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

@@ -1,3 +1,4 @@
+using BlazorAnnuaireProject.AnnuaireServices.SiteService;
 using BlazorAnnuaireProject.Entities;
 using BlazorAnnuaireProject.Models;
 public interface ISiteService
@@ -5,12 +6,14 @@ public interface ISiteService
 
     // CRUD Site
     Task<List<Site>> GetAllSites();
-    Task<List<Site>> GetAllSitesWithSalaries();
+    Task<List<SiteWithSalariesDto>> GetAllSitesWithSalaries();
 
 
-    List<Site> GetSitesWithServices(string ville);
-    Task<Site> GetSiteByNameAndSalaries(string ville);
-    Task<Site> GetSiteByNameAndSalariesAndServices(string ville);
+    Task<List<SiteWithSalariesDto>> GetSiteByNameAndSalariesAndServices(string ville);
+    Task<List<SiteWithSalariesDto>> GetSiteByNameAndSalaries(string ville);
+
+    Task<List<SiteWithServicesDto>> GetSiteByNameAndServices(string ville);
+
     Task<Site> GetSiteByName(string ville);
     CreateSiteResponse CreateSite(CreateSiteRequest site);
 

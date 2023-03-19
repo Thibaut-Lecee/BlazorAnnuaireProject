@@ -36,24 +36,31 @@ public class ServiceService : IServiceService
         return new CreateServiceResponse(registerService);
     }
 
-    // public CreateServiceResponse CreateServiceOnSite(CreateServiceRequest service, string Ville)
-    // {
-    //     var site = _context.Sites.FirstOrDefault(s => s.Ville == Ville);
-    //     if (site == null)
-    //     {
-    //         throw new Exception("Site not found");
-    //     }
-    //     // if (site.Services.Any(s => s.Nom == service.Nom))
-    //     // {
-    //     //     throw new Exception("Service already exists");
-    //     // }
+    public CreateServiceResponse CreateServiceOnSite(CreateServiceRequest service, string Ville)
+    {
+        var site = _context.Sites.FirstOrDefault(s => s.Ville == Ville);
+        if (site == null)
+        {
+            throw new Exception("Site not found");
+        }
 
-    //     // var registerService = _mapper.Map<Services>(service);
-    //     // site.Services.Add(registerService);
-    //     _context.Entry(site).State = EntityState.Modified;
-    //     _context.SaveChanges();
-    //     return new CreateServiceResponse();
-    // }
+        if (site.SiteAndServices == null)
+        {
+            site.SiteAndServices = new List<SiteAndService>();
+        }
+
+        if (site.SiteAndServices.Any(s => s.Service.Nom == service.Nom))
+        {
+            throw new Exception("Service already exists");
+        }
+
+        var registerService = _mapper.Map<Services>(service);
+        _context.Services.Add(registerService);
+        site.SiteAndServices.Add(new SiteAndService { Site = site, Service = registerService });
+        _context.Entry(site).State = EntityState.Modified;
+        _context.SaveChanges();
+        return new CreateServiceResponse(registerService);
+    }
 
     public UpdateServiceResponse UpdateService(UpdateServiceRequest service, string nom)
     {

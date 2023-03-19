@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using BlazorAnnuaireProject.Context;
 using BlazorAnnuaireProject.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -5,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BlazorAnnuaireProject.Controllers
 {
 
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
 
     public class SiteController : ControllerBase
@@ -20,50 +21,71 @@ namespace BlazorAnnuaireProject.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Récupère la liste des services d'un site.
+        /// </summary>
+
         [HttpGet]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [Description("Retourne une liste de tous les sites")]
 
         public async Task<IActionResult> GetAllSites()
         {
             var sites = await _siteService.GetAllSites();
+            if (sites == null)
+                return NotFound("Aucun site n'a été trouvé.");
+
             return Ok(sites);
         }
 
-        [HttpGet("withSalaries")]
+        /// <summary>
+        /// Récupère la liste des salaries pour tous les sites.
+        /// </summary>
+        [HttpGet("WithSalaries")]
+        [Description("Récupère tous les sites avec leurs salariés sous forme de liste")]
         public async Task<IActionResult> GetAllSitesWithSalaries()
         {
             var sites = await _siteService.GetAllSitesWithSalaries();
+            if (sites == null)
+                return NotFound("Aucun site n'a été trouvé.");
             return Ok(sites);
         }
 
-
-
-
-
-        [HttpGet("withSalaries/{ville}")]
+        [HttpGet("WithSalaries/{ville}")]
+        [Description("Récupère un site par  la ville et on retourne les salariés sous forme de liste")]
         public async Task<IActionResult> GetSiteByNameAndSalaries(string ville)
         {
             var site = await _siteService.GetSiteByNameAndSalaries(ville);
+            if (site == null)
+                return NotFound("Aucun site n'a été trouvé.");
             return Ok(site);
         }
 
-        [HttpGet("withServices/{ville}")]
-        public IActionResult GetSitesWithServices(string ville)
+        [HttpGet("WithServices/{ville}")]
+        [Description("Récupère un site par la ville et on retourne les services sous forme de liste")]
+        public async Task<IActionResult> GetSiteWithServices(string ville)
         {
-            var site = _siteService.GetSitesWithServices(ville);
-            return StatusCode(200, site);
+            var site = await _siteService.GetSiteByNameAndServices(ville);
+            if (site == null)
+                return NotFound("Aucun site n'a été trouvé.");
+            return Ok(site);
         }
 
 
-        [HttpGet("withSalariesAndServices/{ville}")]
+        [HttpGet("WithSalariesAndServices/{ville}")]
+        [Description("Récupère un site par la ville et on retourne les salariés et les services sous forme de liste")]
         public async Task<IActionResult> GetSiteByNameAndSalariesAndServices(string ville)
         {
             var site = await _siteService.GetSiteByNameAndSalariesAndServices(ville);
-
+            if (site == null)
+                return NotFound("Aucun site n'a été trouvé.");
             return Ok(site);
         }
 
 
         [HttpGet("{ville}")]
+        [Description("Récupère un site par la ville")]
         public async Task<IActionResult> GetSiteByName(string ville)
         {
             var site = await _siteService.GetSiteByName(ville);
@@ -71,6 +93,7 @@ namespace BlazorAnnuaireProject.Controllers
         }
 
         [HttpPost]
+        [Description("Créer un site")]
         public IActionResult CreateSite([FromBody] CreateSiteRequest site)
         {
             var newSite = _siteService.CreateSite(site);
@@ -79,6 +102,7 @@ namespace BlazorAnnuaireProject.Controllers
 
 
         [HttpPut("{ville}")]
+        [Description("Mettre à jour un site par la ville")]
         public IActionResult UpdateSite([FromBody] UpdateRequest site, string ville)
         {
             var newSite = _siteService.UpdateSite(site, ville);
@@ -87,6 +111,7 @@ namespace BlazorAnnuaireProject.Controllers
 
 
         [HttpDelete("{ville}")]
+        [Description("Supprimer un site par la ville")]
         public IActionResult DeleteSite(string ville)
         {
             var removedSite = _siteService.DeleteSite(ville);

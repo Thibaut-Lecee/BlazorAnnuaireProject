@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using BlazorAnnuaireProject.Context;
 using BlazorAnnuaireProject.Models;
+using System.ComponentModel;
 
 namespace BlazorAnnuaireProject.Controllers
 {
@@ -20,6 +21,7 @@ namespace BlazorAnnuaireProject.Controllers
         }
 
         [HttpGet]
+        [Description("Récupère tous les services sous forme de liste")]
         public async Task<IActionResult> GetAllServices()
         {
             var services = await _serviceService.GetAllServices();
@@ -41,12 +43,12 @@ namespace BlazorAnnuaireProject.Controllers
             return StatusCode(201, new { message = "Service created", newService });
         }
 
-        // [HttpPost("{ville}")]
-        // public IActionResult CreateServiceOnSite([FromBody] CreateServiceRequest service, string ville)
-        // {
-        //     var newService = _serviceService.CreateServiceOnSite(service, ville);
-        //     return StatusCode(201, new { message = "Service created", newService });
-        // }
+        [HttpPost("{ville}")]
+        public IActionResult CreateServiceOnSite([FromBody] CreateServiceRequest service, string ville)
+        {
+            var newService = _serviceService.CreateServiceOnSite(service, ville);
+            return StatusCode(201, new { message = "Service created", newService });
+        }
 
 
         [HttpPut("{nom}")]

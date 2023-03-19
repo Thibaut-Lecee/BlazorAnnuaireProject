@@ -13,6 +13,8 @@ using BlazorAnnuaireProject.AnnuaireServices.ServiceService;
 using BlazorAnnuaireProject.AnnuaireServices.AdminService;
 using BlazorAnnuaireProject.Authorization;
 using BlazorAnnuaireProject.Models;
+using System.Reflection;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +61,24 @@ builder.Services.AddSwaggerGen(options =>
             new string[] { }
         }
     });
+
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "BlazorAnnuaireProject", Version = "v1" });
+    options.CustomSchemaIds(x => x.FullName);
+    options.CustomOperationIds(apiDesc =>
+    {
+        return apiDesc.TryGetMethodInfo(out MethodInfo methodInfo)
+            ? methodInfo.Name
+            : null;
+    });
+
+    options.DocInclusionPredicate((docName, description) => true);
+    options.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null);
+    options.CustomSchemaIds(type => type.FullName);
+    options.IgnoreObsoleteActions();
+    options.IgnoreObsoleteProperties();
+    // Set the comments path for the Swagger JSON and UI.
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "BlazorAnnuaireProject.xml"));
+
 
 });
 builder.Services.Configure<IdentityOptions>(
