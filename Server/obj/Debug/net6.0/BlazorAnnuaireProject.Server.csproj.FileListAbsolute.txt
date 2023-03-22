@@ -258,3 +258,4 @@ C:\Users\lecee\BlazorAnnuaireProject\Server\bin\Debug\net6.0\AutoMapper.Collecti
 C:\Users\lecee\BlazorAnnuaireProject\Server\bin\Debug\net6.0\AutoMapper.Extensions.ExpressionMapping.dll
 C:\Users\lecee\BlazorAnnuaireProject\Server\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\lecee\BlazorAnnuaireProject\Server\bin\Debug\net6.0\BlazorAnnuaireProject.xml
+G:\BlazorAnnuaireProject\Server\bin\Debug\net6.0\BlazorAnnuaireProject.xml

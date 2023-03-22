@@ -120,26 +120,33 @@ public class SiteService : ISiteService
             .Include(s => s.Salaries)
             .Include(s => s.SiteAndServices)
                 .ThenInclude(ss => ss.Service)
+                .ThenInclude(s => s.Salaries)
             .Select(s => new SiteWithSalariesDto
             {
                 Id = s.Id,
                 Ville = s.Ville,
                 Description = s.Description,
-                Salaries = s.Salaries
-                    .Select(ss => new SalariesDto
+                Services = s.SiteAndServices
+                    .Select(ss => new ServiceDto
                     {
-                        Id = ss.Id,
-                        Nom = ss.Nom,
-                        Prenom = ss.Prenom,
-                        Email = ss.Email,
-                        CreatedAt = ss.CreatedAt,
-                        TelephoneFixe = ss.TelephoneFixe,
-                        TelephonePortable = ss.TelephonePortable,
-                        Service = ss.Service.Nom,
-                        Site = ss.Site.Ville
+                        Id = ss.Service.Id,
+                        Nom = ss.Service.Nom,
+                        Salaries = ss.Service.Salaries
+                            .Select(s => new SalariesDto
+                            {
+                                Id = s.Id,
+                                Nom = s.Nom,
+                                Prenom = s.Prenom,
+                                Email = s.Email,
+                                CreatedAt = s.CreatedAt,
+                                TelephoneFixe = s.TelephoneFixe,
+                                TelephonePortable = s.TelephonePortable,
+                                Service = s.Service.Nom,
+                                Site = s.Site.Ville
+                            })
+                            .ToList()
                     })
                     .ToList(),
-
             })
             .ToListAsync();
 

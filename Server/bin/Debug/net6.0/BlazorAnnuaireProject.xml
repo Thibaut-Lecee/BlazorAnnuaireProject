@@ -74,5 +74,17 @@
         <member name="M:BlazorAnnuaireProject.Server.Migrations.TableUpdatedAvecContextData.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:BlazorAnnuaireProject.Server.Migrations.Fknullforsalaries">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.Fknullforsalaries.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.Fknullforsalaries.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:BlazorAnnuaireProject.Server.Migrations.Fknullforsalaries.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

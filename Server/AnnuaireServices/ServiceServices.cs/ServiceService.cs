@@ -89,7 +89,6 @@ public class ServiceService : IServiceService
         }
 
         return new UpdateServiceResponse(existingService, "Service not updated");
-
     }
 
     public DeleteServiceResponse DeleteService(string nom)

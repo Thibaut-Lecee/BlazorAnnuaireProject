@@ -53,17 +53,81 @@ public class AdminService : IAdminService
         return new AuthenticateResponse(admin, AccessToken.AccessToken, AccessToken.NewToken, AccessToken.AccessTokenExpires, AccessToken.NewTokenExpires);
     }
 
-    public void RegisterSalaries(RegisterRequest request)
+    public CreateSalarieReponse CreateSalarie(RegisterRequestSalarie salarie)
     {
-        if (_context.Salaries.Any(x => x.Email == request.Email))
-            throw new AppException("Email " + request.Email + " is already taken");
+        var registerSalarie = _mapper.Map<Salaries>(salarie);
 
-        var register = _mapper.Map<Salaries>(request);
-
-        register.CreatedAt = DateTime.UtcNow;
-        _context.Salaries.Add(register);
+        _context.Salaries.Add(registerSalarie);
         _context.SaveChanges();
-        
+        return new CreateSalarieReponse(registerSalarie);
+    }
+
+    public CreateSalarieReponse CreateSalarieOnService(RegisterRequestSalarie salarie, string Service)
+    {
+        var service = _context.Services.FirstOrDefault(s => s.Nom == Service);
+        if (service == null)
+        {
+            throw new Exception("Service not found");
+        }
+
+        if (service.Salaries == null)
+        {
+            service.Salaries = new List<Salaries>();
+        }
+
+        if (service.Salaries.Any(s => s.Email == salarie.Email))
+        {
+            throw new Exception("Salarie already exists");
+        }
+
+        var registerSalarie = _mapper.Map<Salaries>(salarie);
+        _context.Salaries.Add(registerSalarie);
+        service.Salaries.Add(registerSalarie);
+        _context.Entry(service).State = EntityState.Modified;
+        _context.SaveChanges();
+        return new CreateSalarieReponse(registerSalarie);
+    }
+
+    public UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie)
+    {
+        var existingSalarie = _context.Salaries.FirstOrDefault(s => s.Email == salarie.Email);
+
+        if (existingSalarie == null)
+        {
+            throw new Exception("Salarie not found");
+        }
+
+        if (_context.Salaries.Any(s => s.Email == salarie.Email) || _context.Salaries.Any(s => s.TelephoneFixe == salarie.TelephoneFixe)
+            || _context.Salaries.Any(s => s.TelephonePortable == salarie.TelephonePortable))
+        {
+            throw new Exception("Salarie already exists with this email or phone number" + salarie.Email + " " + salarie.TelephoneFixe + " " + salarie.TelephonePortable);
+        }
+
+        existingSalarie.Nom = salarie.Nom;
+        existingSalarie.Prenom = salarie.Prenom;
+        existingSalarie.Email = salarie.Email;
+        existingSalarie.TelephoneFixe = salarie.TelephoneFixe;
+        existingSalarie.TelephonePortable = salarie.TelephonePortable;
+        existingSalarie.Service = _context.Services.FirstOrDefault(s => s.Nom == salarie.Service);
+        existingSalarie.Site = _context.Sites.FirstOrDefault(s => s.Ville == salarie.Site);
+        _context.Entry(existingSalarie).State = EntityState.Modified;
+        _context.SaveChanges();
+
+        return new UpdateSalarieResponse(existingSalarie);
+    }
+
+    public DeleteResponse DeleteSalarie(string email)
+    {
+        var salarie = _context.Salaries.FirstOrDefault(s => s.Email == email);
+        if (salarie == null)
+        {
+            throw new AppException("Le salarie n'a pas été trouvé");
+        }
+        var removed = salarie.Email;
+        _context.Salaries.Remove(salarie);
+        _context.SaveChanges();
+
+        return new DeleteResponse(removed, "Le site a été supprimé");
     }
 
     public Admin GetAdminByRefreshToken(string token)

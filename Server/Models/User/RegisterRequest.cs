@@ -1,6 +1,20 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace BlazorAnnuaireProject.Models
 {
-    public class RegisterRequest
+    public class RegisterRequestSalarie
+    {
+        [Required] public string Nom { get; set; }
+        [Required] public string Prenom { get; set; }
+        [Required, EmailAddress] public string Email { get; set; }
+
+        [Required] public string TelephoneFixe { get; set; }
+        [Required] public string TelephonePortable { get; set; }
+
+        //1ère association avec le Service  (1 salarié = 1 service)
+
+    }
+    public class UpdateSalarieRequest
     {
         public string Nom { get; set; }
         public string Prenom { get; set; }
@@ -9,9 +23,9 @@ namespace BlazorAnnuaireProject.Models
         public string TelephoneFixe { get; set; }
         public string TelephonePortable { get; set; }
 
-        public int ServiceId { get; set; }
-        public int SiteId { get; set; }
+        public string Service { get; set; }
 
-        //1ère association avec le Service  (1 salarié = 1 service)
+        public string Site { get; set; }
     }
+
 }

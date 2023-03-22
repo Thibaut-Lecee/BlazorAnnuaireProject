@@ -13,11 +13,11 @@ public class Salaries
     public string? TelephonePortable { get; set; }
 
     //1ère association avec le Service  (1 salarié = 1 service)
-    [JsonIgnore] public int ServiceId { get; set; }
-    public Services Service { get; set; }
+    [JsonIgnore] public int? ServiceId { get; set; }
+    public Services? Service { get; set; }
 
     // 2ème association avec le site  (1 salarié = 1 site)
-    [JsonIgnore] public int SiteId { get; set; }
-    public Site Site { get; set; }
+    [JsonIgnore] public int? SiteId { get; set; }
+    public Site? Site { get; set; }
 
 }

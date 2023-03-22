@@ -43,6 +43,18 @@ namespace BlazorAnnuaireProject.Controllers
             return Ok(salarie);
         }
 
+        [HttpGet("SalarieByEmail/{email}")]
+        public async Task<IActionResult> GetSalarieByEmail(string email)
+        {
+            var salarie = await _salarieService.GetSalariesByEmail(email);
+            return Ok(salarie);
+        }
+        [HttpGet("SalarieByEmailWithAssociations/{email}")]
+        public async Task<IActionResult> GetSalarieByEmaildWithAssociations(string email)
+        {
+            var salarie = await _salarieService.GetSalariesByEmailWithAssociations(email);
+            return Ok(salarie);
+        }
     }
 
 }

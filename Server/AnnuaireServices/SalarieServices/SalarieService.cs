@@ -1,7 +1,10 @@
 using AutoMapper;
+using BlazorAnnuaireProject.AnnuaireServices.SiteService;
 using BlazorAnnuaireProject.Context;
 using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Models;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace BlazorAnnuaireProject.AnnuaireServices.SalarieService;
 
@@ -9,10 +12,11 @@ namespace BlazorAnnuaireProject.AnnuaireServices.SalarieService;
 public class SalarieService : ISalarieService
 {
     private readonly DataContext _context;
-
-    public SalarieService(DataContext context)
+    private readonly IMapper _mapper;
+    public SalarieService(DataContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<List<Salaries>> GetAllSalariesWithAssociations()
@@ -27,18 +31,65 @@ public class SalarieService : ISalarieService
 
 
 
-    public async Task<Salaries> GetSalariesById(int id)
+    public async Task<SalariesDto> GetSalariesById(int id)
     {
 
-        var salary = await _context.Salaries.FirstOrDefaultAsync(s => s.Id == id);
-        if (salary != null)
-        {
-            salary.Service = await _context.Services.FirstOrDefaultAsync(s => s.Id == salary.ServiceId);
-            salary.Site = await _context.Sites.FirstOrDefaultAsync(s => s.Id == salary.SiteId);
-        }
+        var salary = await _context.Salaries.Where(s => s.Id == id)
+        .Include(s => s.Service)
+          .Include(s => s.Site)
+          .Select(s => new SalariesDto
+          {
+              Id = s.Id,
+              Nom = s.Nom,
+              Prenom = s.Prenom,
+              Email = s.Email,
+              CreatedAt = s.CreatedAt,
+              TelephoneFixe = s.TelephoneFixe,
+              TelephonePortable = s.TelephonePortable,
+              Service = s.Service.Nom,
+              Site = s.Site.Ville
+          })
+          .FirstOrDefaultAsync();
+
         return salary;
     }
 
-    
+    public async Task<SalariesDto> GetSalariesByEmailWithAssociations(string email)
+    {
+        var salary = await _context.Salaries.Where(s => s.Email == email)
+        .Include(s => s.Service)
+          .Include(s => s.Site)
+          .Select(s => new SalariesDto
+          {
+              Id = s.Id,
+              Nom = s.Nom,
+              Prenom = s.Prenom,
+              Email = s.Email,
+              CreatedAt = s.CreatedAt,
+              TelephoneFixe = s.TelephoneFixe,
+              TelephonePortable = s.TelephonePortable,
+              Service = s.Service.Nom,
+              Site = s.Site.Ville
+          })
+          .FirstOrDefaultAsync();
+
+        return salary;
+    }
+
+    public async Task<Salaries> GetSalariesByEmail(string email)
+    {
+        return await _context.Salaries.FirstOrDefaultAsync(s => s.Email == email);
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 }

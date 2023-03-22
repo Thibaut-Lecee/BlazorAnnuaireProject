@@ -14,6 +14,6 @@ namespace BlazorAnnuaireProject.AnnuaireServices.SiteService
         public string Ville { get; set; }
         public string Description { get; set; }
         public List<SalariesDto> Salaries { get; set; }
-        public List<string> Services { get; internal set; }
+        public List<ServiceDto> Services { get; internal set; }
     }
 }

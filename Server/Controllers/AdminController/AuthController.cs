@@ -5,6 +5,7 @@ using BlazorAnnuaireProject.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using BlazorAnnuaireProject.Authorization;
 using BlazorAnnuaireProject.Context;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlazorAnnuaireProject.Controllers
 {
@@ -42,11 +43,66 @@ namespace BlazorAnnuaireProject.Controllers
 
         [HttpPost("Register")]
 
-        public IActionResult Register([FromBody] RegisterRequest request)
+        public IActionResult Register([FromBody] RegisterRequestSalarie request)
         {
-            _adminService.RegisterSalaries(request);
-            return StatusCode(201, "Salarie created successfully");
+            var created = _adminService.CreateSalarie(request);
+            return StatusCode(201, created);
         }
+
+        [HttpPost("RegisterOnService/{Service}")]
+        public IActionResult RegisterOnService([FromBody] RegisterRequestSalarie request, string Service)
+        {
+            var created = _adminService.CreateSalarieOnService(request, Service);
+            return StatusCode(201, created);
+        }
+
+        [HttpPut("UpdateSalarie")]
+        public IActionResult UpdateSalarie([FromBody] UpdateSalarieRequest request)
+        {
+            var created = _adminService.UpdateSalarie(request);
+            return StatusCode(201, created);
+        }
+
+        [HttpPost("RefreshToken")]
+        public IActionResult RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            var admin = _adminService.GetAdminByRefreshToken(refreshToken);
+            var newAccessToken = _jwtUtils.GenerateAccessToken(admin);
+            SetTokenCookie(newAccessToken.AccessToken, admin.RoleId, newAccessToken.NewToken, newAccessToken.AccessTokenExpires, newAccessToken.NewTokenExpires);
+            return StatusCode(200, newAccessToken);
+        }
+
+        [HttpDelete("DeleteSalarie/{email}")]
+        public IActionResult DeleteSalarie(string email)
+        {
+            _adminService.DeleteSalarie(email);
+            return StatusCode(200, "Salarie deleted");
+        }
+
+        [HttpPost("Logout")]
+        public IActionResult Logout()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            var admin = _adminService.GetAdminByRefreshToken(refreshToken);
+            admin.RefreshToken = null;
+            _context.SaveChanges();
+            Response.Cookies.Delete("refreshToken");
+            Response.Cookies.Delete("AccessToken");
+            return StatusCode(200);
+        }
+
+        [HttpGet("GetAdmin")]
+        [Authorize]
+        public IActionResult GetAdmin()
+        {
+            var token = Request.Cookies["AccessToken"];
+            var admin = CheckToken(token);
+            return StatusCode(200, admin);
+        }
+
+
+
         private void SetTokenCookie(string token, int id, string refreshToken, DateTime tokenExpires, DateTime newTokenExpires)
         {
             // append cookie with refresh token to the http response

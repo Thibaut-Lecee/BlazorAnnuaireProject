@@ -10,7 +10,7 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<Admin, AuthenticateResponse>();
 
-        CreateMap<RegisterRequest, Salaries>();
+        CreateMap<RegisterRequestSalarie, Salaries>();
 
         CreateMap<Site, CreateSiteResponse>();
 

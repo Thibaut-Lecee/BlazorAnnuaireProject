@@ -6,7 +6,11 @@ public interface IAdminService
     Task<Admin> GetAdminsById(int id);
     AuthenticateResponse Login(AuthenticateRequest model);
 
-    void RegisterSalaries(RegisterRequest request);
-
+    CreateSalarieReponse CreateSalarie(RegisterRequestSalarie salarie);
+    CreateSalarieReponse CreateSalarieOnService(RegisterRequestSalarie salarie, string Service);
+    UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie);
     Admin GetAdminByRefreshToken(string token);
+
+    DeleteResponse DeleteSalarie(string email);
+
 }

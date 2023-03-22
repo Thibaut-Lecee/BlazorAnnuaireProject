@@ -6,7 +6,7 @@ using System.ComponentModel;
 namespace BlazorAnnuaireProject.Controllers
 {
 
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
 
     public class ServiceController : ControllerBase
@@ -20,6 +20,7 @@ namespace BlazorAnnuaireProject.Controllers
             _context = context;
         }
 
+        
         [HttpGet]
         [Description("Récupère tous les services sous forme de liste")]
         public async Task<IActionResult> GetAllServices()
