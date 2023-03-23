@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using BlazorAnnuaireProject.Helpers;
 using BlazorAnnuaireProject.Models;
 using AutoMapper;
+using System.Net;
 
 namespace BlazorAnnuaireProject.AnnuaireServices.AdminService;
 public class AdminService : IAdminService
@@ -40,11 +41,11 @@ public class AdminService : IAdminService
     {
         var admin = _context.Admins.SingleOrDefault(x => x.Email == model.Email);
 
-        if (admin == null) throw new AppException("No admin found");
+        if (admin == null) throw new AppException(400, "No admin found");
         Console.WriteLine(admin.PasswordHash, model.Password);
 
         if (!BCrypt.Net.BCrypt.Verify(model.Password, admin.PasswordHash))
-            throw new AppException("Password is incorrect");
+            throw new AppException(400, "Password is incorrect");
 
         var AccessToken = _jwtUtils.GenerateAccessToken(admin);
 
@@ -55,6 +56,10 @@ public class AdminService : IAdminService
 
     public CreateSalarieReponse CreateSalarie(RegisterRequestSalarie salarie)
     {
+        if (_context.Salaries.Any(s => s.Email == salarie.Email))
+        {
+            throw new AppException(400, "Salarie already exists");
+        }
         var registerSalarie = _mapper.Map<Salaries>(salarie);
 
         _context.Salaries.Add(registerSalarie);
@@ -62,8 +67,47 @@ public class AdminService : IAdminService
         return new CreateSalarieReponse(registerSalarie);
     }
 
+
+    public CreateSalarieReponse CreateSalarieOnServiceAndSite(RegisterRequestSalarie salarie, string Site, string Service)
+    {
+        if (_context.Salaries.Any(s => s.Email == salarie.Email))
+        {
+            throw new Exception("Salarie already exists");
+        }
+        var service = _context.Services.FirstOrDefault(s => s.Nom == Service);
+        var site = _context.Sites.FirstOrDefault(s => s.Ville == Site);
+        if (service == null || site == null)
+        {
+            throw new Exception("Service or Site not found");
+        }
+        if (service.Salaries == null || site.Salaries == null)
+        {
+            service.Salaries = new List<Salaries>();
+            site.Salaries = new List<Salaries>();
+        }
+        if (service.Salaries.Any(s => s.Email == salarie.Email))
+        {
+            throw new Exception("Salarie already exists");
+        }
+
+        var registerSalarie = _mapper.Map<Salaries>(salarie);
+        registerSalarie.Site = site;
+        registerSalarie.Service = service;
+        _context.Salaries.Add(registerSalarie);
+        service.Salaries.Add(registerSalarie);
+        site.Salaries.Add(registerSalarie);
+        _context.Entry(service).State = EntityState.Modified;
+        _context.SaveChanges();
+        return new CreateSalarieReponse(registerSalarie);
+    }
+
+
     public CreateSalarieReponse CreateSalarieOnService(RegisterRequestSalarie salarie, string Service)
     {
+        if (_context.Salaries.Any(s => s.Email == salarie.Email))
+        {
+            throw new Exception("Salarie already exists");
+        }
         var service = _context.Services.FirstOrDefault(s => s.Nom == Service);
         if (service == null)
         {
@@ -80,6 +124,7 @@ public class AdminService : IAdminService
             throw new Exception("Salarie already exists");
         }
 
+
         var registerSalarie = _mapper.Map<Salaries>(salarie);
         _context.Salaries.Add(registerSalarie);
         service.Salaries.Add(registerSalarie);
@@ -87,7 +132,6 @@ public class AdminService : IAdminService
         _context.SaveChanges();
         return new CreateSalarieReponse(registerSalarie);
     }
-
     public UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie)
     {
         var existingSalarie = _context.Salaries.FirstOrDefault(s => s.Email == salarie.Email);
@@ -112,7 +156,6 @@ public class AdminService : IAdminService
         existingSalarie.Site = _context.Sites.FirstOrDefault(s => s.Ville == salarie.Site);
         _context.Entry(existingSalarie).State = EntityState.Modified;
         _context.SaveChanges();
-
         return new UpdateSalarieResponse(existingSalarie);
     }
 
@@ -121,7 +164,7 @@ public class AdminService : IAdminService
         var salarie = _context.Salaries.FirstOrDefault(s => s.Email == email);
         if (salarie == null)
         {
-            throw new AppException("Le salarie n'a pas été trouvé");
+            throw new AppException(400, "Le salarie n'a pas été trouvé");
         }
         var removed = salarie.Email;
         _context.Salaries.Remove(salarie);
@@ -138,5 +181,8 @@ public class AdminService : IAdminService
         if (admin == null) throw new KeyNotFoundException("Tous les tokens sont expirés");
         return admin;
     }
+
+
+
 
 }

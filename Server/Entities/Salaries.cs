@@ -8,7 +8,7 @@ public class Salaries
     public string? Nom { get; set; }
     public string? Prenom { get; set; }
     public string? Email { get; set; }
-    public DateTime? CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; } = DateTime.Now;
     public string? TelephoneFixe { get; set; }
     public string? TelephonePortable { get; set; }
 

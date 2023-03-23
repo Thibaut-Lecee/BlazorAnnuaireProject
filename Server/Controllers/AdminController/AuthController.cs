@@ -45,8 +45,16 @@ namespace BlazorAnnuaireProject.Controllers
 
         public IActionResult Register([FromBody] RegisterRequestSalarie request)
         {
-            var created = _adminService.CreateSalarie(request);
-            return StatusCode(201, created);
+            try
+            {
+                var created = _adminService.CreateSalarie(request);
+                return StatusCode(201, created);
+            }
+            catch (AppException ex)
+            {
+                return StatusCode(ex.HttpStatusCode, ex.Message);
+            }
+
         }
 
         [HttpPost("RegisterOnService/{Service}")]
@@ -56,11 +64,33 @@ namespace BlazorAnnuaireProject.Controllers
             return StatusCode(201, created);
         }
 
+        [HttpPost("RegisterOnServiceAndSite/{Site}/{Service}")]
+        public IActionResult RegisterOnServiceAndSite([FromBody] RegisterRequestSalarie request, string Site, string Service)
+        {
+            try
+            {
+                var created = _adminService.CreateSalarieOnServiceAndSite(request, Site, Service);
+                return StatusCode(201, created);
+            }
+            catch (AppException ex)
+            {
+                return StatusCode(ex.HttpStatusCode, ex.Message);
+            }
+        }
+
         [HttpPut("UpdateSalarie")]
         public IActionResult UpdateSalarie([FromBody] UpdateSalarieRequest request)
         {
-            var created = _adminService.UpdateSalarie(request);
-            return StatusCode(201, created);
+            try
+            {
+                var created = _adminService.UpdateSalarie(request);
+                return StatusCode(201, created);
+            }
+             catch (AppException ex)
+            {
+                return StatusCode(ex.HttpStatusCode, ex.Message);
+            }
+        
         }
 
         [HttpPost("RefreshToken")]

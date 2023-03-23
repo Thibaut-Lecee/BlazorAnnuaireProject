@@ -11,6 +11,8 @@ namespace BlazorAnnuaireProject.Models
         [Required] public string TelephoneFixe { get; set; }
         [Required] public string TelephonePortable { get; set; }
 
+
+
         //1ère association avec le Service  (1 salarié = 1 service)
 
     }

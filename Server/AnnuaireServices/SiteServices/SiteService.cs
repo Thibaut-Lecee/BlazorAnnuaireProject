@@ -172,11 +172,11 @@ public class SiteService : ISiteService
         var existingSite = _context.Sites.FirstOrDefault(s => s.Ville == ville);
         if (existingSite == null)
         {
-            throw new AppException("Le site n'a pas été trouvé");
+            throw new AppException(400, "Le site n'a pas été trouvé");
         }
         if (SalariesOnSite(existingSite.Id))
         {
-            throw new AppException("Impossible de modifier le site car il contient des salariés");
+            throw new AppException(400, "Impossible de modifier le site car il contient des salariés");
         }
 
         bool modified = false;
@@ -214,11 +214,11 @@ public class SiteService : ISiteService
         var site = _context.Sites.FirstOrDefault(s => s.Ville == ville);
         if (site == null)
         {
-            throw new AppException("Le site n'a pas été trouvé");
+            throw new AppException(400, "Le site n'a pas été trouvé");
         }
         if (SalariesOnSite(site.Id))
         {
-            throw new AppException("Impossible de supprimer le site car il contient des salariés");
+            throw new AppException(400, "Impossible de supprimer le site car il contient des salariés");
         }
         var infoRemoved = site.Ville + " " + site.Description;
         _context.Sites.Remove(site);

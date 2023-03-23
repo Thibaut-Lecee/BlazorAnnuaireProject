@@ -8,6 +8,7 @@ public interface IAdminService
 
     CreateSalarieReponse CreateSalarie(RegisterRequestSalarie salarie);
     CreateSalarieReponse CreateSalarieOnService(RegisterRequestSalarie salarie, string Service);
+    CreateSalarieReponse CreateSalarieOnServiceAndSite(RegisterRequestSalarie salarie, string Site, string Service);
     UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie);
     Admin GetAdminByRefreshToken(string token);
 
