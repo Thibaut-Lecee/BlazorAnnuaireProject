@@ -259,3 +259,4 @@ C:\Users\lecee\BlazorAnnuaireProject\Server\bin\Debug\net6.0\AutoMapper.Extensio
 C:\Users\lecee\BlazorAnnuaireProject\Server\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\lecee\BlazorAnnuaireProject\Server\bin\Debug\net6.0\BlazorAnnuaireProject.xml
 G:\BlazorAnnuaireProject\Server\bin\Debug\net6.0\BlazorAnnuaireProject.xml
+C:\Users\lecee\BlazorAnnuaireProject\Server\bin\Debug\net6.0\Blazored.Toast.dll

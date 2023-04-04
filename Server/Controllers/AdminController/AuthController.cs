@@ -41,6 +41,7 @@ namespace BlazorAnnuaireProject.Controllers
             return StatusCode(200, response);
         }
 
+
         [HttpPost("Register")]
 
         public IActionResult Register([FromBody] RegisterRequestSalarie request)
@@ -78,19 +79,19 @@ namespace BlazorAnnuaireProject.Controllers
             }
         }
 
-        [HttpPut("UpdateSalarie")]
-        public IActionResult UpdateSalarie([FromBody] UpdateSalarieRequest request)
+        [HttpPut("UpdateSalarie/{email}")]
+        public IActionResult UpdateSalarie([FromBody] UpdateSalarieRequest request, string email)
         {
             try
             {
-                var created = _adminService.UpdateSalarie(request);
+                var created = _adminService.UpdateSalarie(request, email);
                 return StatusCode(201, created);
             }
-             catch (AppException ex)
+            catch (AppException ex)
             {
                 return StatusCode(ex.HttpStatusCode, ex.Message);
             }
-        
+
         }
 
         [HttpPost("RefreshToken")]

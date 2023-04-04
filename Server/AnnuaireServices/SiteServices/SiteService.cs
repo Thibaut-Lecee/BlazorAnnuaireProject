@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using BlazorAnnuaireProject.Models;
 using AutoMapper;
 using BlazorAnnuaireProject.Helpers;
+using BlazorAnnuaireProject.Shared;
 
 namespace BlazorAnnuaireProject.AnnuaireServices.SiteService;
 

@@ -35,6 +35,36 @@ main {
         overflow: hidden;
         text-overflow: ellipsis;
     }
+   
+    .pagination {
+        justify-content: center;
+    }
+    
+    .page-item .page-link {
+        border: none;
+        color: #6c757d;
+        background-color: transparent;
+        font-weight: 600;
+        transition: color 0.3s, background-color 0.3s;
+    }
+    
+    .page-item .page-link:hover {
+        color: #BB55FF;
+        background-color: transparent;
+    }
+    
+    .page-item.active .page-link {
+        color: #fff;
+        background-color: #BB55FF;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
 
 @media (max-width: 640.98px) {
     .top-row:not(.auth) {
@@ -78,4 +108,6 @@ main {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
     }
+
+  
 }

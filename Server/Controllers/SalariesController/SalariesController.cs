@@ -25,23 +25,18 @@ namespace BlazorAnnuaireProject.Controllers
 
         [HttpGet]
 
+        [HttpGet]
         public async Task<IActionResult> GetAllSalaries()
         {
             var salaries = await _salarieService.GetAllSalaries();
-            var options = new JsonSerializerOptions
+            if (salaries == null)
             {
-                ReferenceHandler = ReferenceHandler.Preserve
-            };
-            var json = JsonSerializer.Serialize(salaries, options);
-            return Ok(json);
+                return NotFound();
+            }
+            return Ok(salaries); 
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetSalarieById(int id)
-        {
-            var salarie = await _salarieService.GetSalariesById(id);
-            return Ok(salarie);
-        }
+
 
         [HttpGet("SalarieByEmail/{email}")]
         public async Task<IActionResult> GetSalarieByEmail(string email)

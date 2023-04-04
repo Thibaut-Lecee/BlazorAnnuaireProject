@@ -132,32 +132,72 @@ public class AdminService : IAdminService
         _context.SaveChanges();
         return new CreateSalarieReponse(registerSalarie);
     }
-    public UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie)
+    public UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie, string email)
     {
-        var existingSalarie = _context.Salaries.FirstOrDefault(s => s.Email == salarie.Email);
+        var existingSalarie = _context.Salaries.FirstOrDefault(s => s.Email == email);
 
         if (existingSalarie == null)
         {
             throw new Exception("Salarie not found");
         }
+        var service = _context.Services.FirstOrDefault(s => s.Nom == salarie.Service);
+        var site = _context.Sites.FirstOrDefault(s => s.Ville == salarie.Site);
 
-        if (_context.Salaries.Any(s => s.Email == salarie.Email) || _context.Salaries.Any(s => s.TelephoneFixe == salarie.TelephoneFixe)
-            || _context.Salaries.Any(s => s.TelephonePortable == salarie.TelephonePortable))
+        var duplicateSalarie = _context.Salaries
+            .Any(s => s.Id != existingSalarie.Id && // Ajout de cette condition pour exclure le salarié actuel
+                                                    // on regarde si un salarié existe avec les mêmes informations que le salarié à modifier dans le service et le site spécifié
+                      s.Service.Id == service.Id &&
+                      s.Site.Id == site.Id &&
+                      (s.Nom == salarie.Nom || s.Prenom == salarie.Prenom || s.TelephoneFixe == salarie.TelephoneFixe || s.TelephonePortable == salarie.TelephonePortable));
+
+        // sinon on peut utiliser cette condition pour voir s'il y a un doublon dans toute la table salarié
+        // var duplicateSalarie = _context.Salaries
+        //     .Any(s => s.Id != existingSalarie.Id && // Ajout de cette condition pour exclure le salarié actuel
+        //     // on regarde si un salarié existe avec les mêmes informations que le salarié à modifier dans le service et le site spécifié
+        //               (s.Nom == salarie.Nom || s.Prenom == salarie.Prenom || s.TelephoneFixe == salarie.TelephoneFixe || s.TelephonePortable == salarie.TelephonePortable));
+
+        if (duplicateSalarie)
         {
-            throw new Exception("Salarie already exists with this email or phone number" + salarie.Email + " " + salarie.TelephoneFixe + " " + salarie.TelephonePortable);
+            throw new Exception("A salarie with the same information already exists in the specified service and site.");
         }
 
-        existingSalarie.Nom = salarie.Nom;
-        existingSalarie.Prenom = salarie.Prenom;
-        existingSalarie.Email = salarie.Email;
-        existingSalarie.TelephoneFixe = salarie.TelephoneFixe;
-        existingSalarie.TelephonePortable = salarie.TelephonePortable;
-        existingSalarie.Service = _context.Services.FirstOrDefault(s => s.Nom == salarie.Service);
-        existingSalarie.Site = _context.Sites.FirstOrDefault(s => s.Ville == salarie.Site);
+        if (!string.IsNullOrEmpty(salarie.Nom))
+        {
+            existingSalarie.Nom = salarie.Nom;
+        }
+        if (!string.IsNullOrEmpty(salarie.Prenom))
+        {
+            existingSalarie.Prenom = salarie.Prenom;
+        }
+        if (!string.IsNullOrEmpty(salarie.Email))
+        {
+            existingSalarie.Email = salarie.Email;
+        }
+        if (!string.IsNullOrEmpty(salarie.TelephoneFixe))
+        {
+            existingSalarie.TelephoneFixe = salarie.TelephoneFixe;
+        }
+        if (!string.IsNullOrEmpty(salarie.TelephonePortable))
+        {
+            existingSalarie.TelephonePortable = salarie.TelephonePortable;
+        }
+        if (!string.IsNullOrEmpty(salarie.Service))
+        {
+            existingSalarie.Service = _context.Services.FirstOrDefault(s => s.Nom == salarie.Service) ?? existingSalarie.Service;
+        }
+        if (!string.IsNullOrEmpty(salarie.Site))
+        {
+            existingSalarie.Site = _context.Sites.FirstOrDefault(s => s.Ville == salarie.Site) ?? existingSalarie.Site;
+        }
+
+
         _context.Entry(existingSalarie).State = EntityState.Modified;
         _context.SaveChanges();
         return new UpdateSalarieResponse(existingSalarie);
     }
+
+
+
 
     public DeleteResponse DeleteSalarie(string email)
     {

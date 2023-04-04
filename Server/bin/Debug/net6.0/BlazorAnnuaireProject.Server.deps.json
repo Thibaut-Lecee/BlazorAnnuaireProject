@@ -14,6 +14,7 @@
           "BCrypt.Net-Next": "4.0.3",
           "BlazorAnnuaireProject.Client": "1.0.0",
           "BlazorAnnuaireProject.Shared": "1.0.0",
+          "Blazored.Toast": "4.1.0",
           "Bogus": "34.0.2",
           "EntityFramework": "6.4.4",
           "Faker.Net": "2.0.154",
@@ -126,6 +127,19 @@
           "lib/net6.0/BCrypt.Net-Next.dll": {
             "assemblyVersion": "4.0.3.0",
             "fileVersion": "4.0.3.0"
+          }
+        }
+      },
+      "Blazored.Toast/4.1.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "6.0.14",
+          "Microsoft.AspNetCore.Components.Web": "6.0.14",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0-preview.1.23110.8"
+        },
+        "runtime": {
+          "lib/net6.0/Blazored.Toast.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -1076,6 +1090,7 @@
       "BlazorAnnuaireProject.Client/1.0.0": {
         "dependencies": {
           "BlazorAnnuaireProject.Shared": "1.0.0",
+          "Blazored.Toast": "4.1.0",
           "Microsoft.AspNetCore.Components.WebAssembly": "6.0.14"
         },
         "runtime": {
@@ -1150,6 +1165,13 @@
       "sha512": "sha512-W+U9WvmZQgi5cX6FS5GDtDoPzUCV4LkBLkywq/kRZhuDwcbavOzcDAr3LXJFqHUi952Yj3LEYoWW0jbEUQChsA==",
       "path": "bcrypt.net-next/4.0.3",
       "hashPath": "bcrypt.net-next.4.0.3.nupkg.sha512"
+    },
+    "Blazored.Toast/4.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-k12tFBnMMU67bPoBKLTuR2POcYOz02UtT8Lzyeu8fMv587nO8VaWqFfRMJ8Hxkb1SbxL8lY2WiK9tWAZ934khQ==",
+      "path": "blazored.toast/4.1.0",
+      "hashPath": "blazored.toast.4.1.0.nupkg.sha512"
     },
     "Bogus/34.0.2": {
       "type": "package",

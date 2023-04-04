@@ -1,0 +1,41 @@
+@page "/login"
+
+
+<PageTitle>Login</PageTitle>
+
+<h1>Login</h1>
+
+<EditForm Model="@loginModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="username">Username</label>
+        <InputText class="form-control" id="username" @bind-Value="loginModel.Username" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText class="form-control" id="password" @bind-Value="loginModel.Password" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Login</button>
+
+</EditForm>
+
+@code {
+    private AdminDto AdminDto = new AdminDto();
+
+    private async Task HandleValidSubmit()
+    {
+        var result = await AuthenticationStateProvider
+            .GetAuthenticationStateAsync();
+
+        var admin = result.AdminDto;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

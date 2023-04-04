@@ -1,0 +1,139 @@
+@page "/salaries"
+@inject HttpClient Http
+
+<h3>Salaries</h3>
+
+<div class="form-group d-flex justify-content-around align-items-center ">
+    <div>
+    <input style="width:80px height:20px" @bind="search" @oninput="FilterSalaries" class="form-control" placeholder="Rechercher..." />
+    </div>
+<div class="">
+    <select class="form-control" @bind="search" @oninput="FilterSalaries">
+        <option value="">Tous les sites</option>
+        @foreach (var site in allSites) {
+            <option value="@site.Ville">@site.Ville</option>
+        }
+    </select>
+</div>
+<div class="">
+    <label>Show:</label>
+    <select @bind="pageSize" @oninput="UpdatePageSize">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="75">75</option>
+        <option value="100">100</option>
+    </select>
+</div>
+</div>
+
+<div style="max-height: calc(90vh - 200px);
+    overflow-y: auto;
+    display: block;">
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Email</th>
+            <th>CreatedAt</th>
+            <th>TelephoneFixe</th>
+            <th>TelephonePortable</th>
+            <th>Service</th>
+            <th>Site</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+     <tbody>
+            @foreach (var salary in filteredSalaries.Skip((currentPage - 1) * pageSize).Take(pageSize))
+            {
+                <tr>
+                    <td>@salary.Id</td>
+                    <td>@salary.Nom</td>
+                    <td>@salary.Prenom</td>
+                    <td>@salary.Email</td>
+                    <td>@salary.CreatedAt</td>
+                    <td>@salary.TelephoneFixe</td>
+                    <td>@salary.TelephonePortable</td>
+                    <td>@salary.Service</td>
+                    <td>@salary.Site</td>
+                    <td>
+                        <button type="button" class="btn btn-success" @onclick="() => ShowEmployeeInfo(salary)">Informations</button>
+                    </td>
+
+                </tr>
+            }
+
+    </tbody> 
+</table>
+
+</div> 
+<SalarieInfoModal @ref="salarieInfoModal" OnClose="ModalClosed" />
+<Pager CurrentPage="currentPage" TotalPages="totalPages" OnPageChanged="UpdateCurrentPage" /> 
+
+@code {
+    private List<SalariesDto> allSalaries = new List<SalariesDto>();
+    private List<SalariesDto> filteredSalaries = new List<SalariesDto>();
+    private List<SiteWithServicesDto> allSites = new List<SiteWithServicesDto>();
+  
+    private string search = "";
+    private int currentPage = 1;
+    private int totalPages;
+    private int pageSize = 10;
+
+    private SalarieInfoModal salarieInfoModal = new SalarieInfoModal();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        allSalaries = await Http.GetFromJsonAsync<List<SalariesDto>>("api/Salaries");
+        allSites = await Http.GetFromJsonAsync<List<SiteWithServicesDto>>("/Site");
+        filteredSalaries = allSalaries;
+        totalPages = (int)Math.Ceiling((decimal)allSalaries.Count / pageSize);
+
+    }
+
+    private void ModalClosed()
+    {
+        Console.WriteLine("Modal closed");
+        StateHasChanged();
+    }
+
+   private void ShowEmployeeInfo(SalariesDto salaries)
+    {
+    salarieInfoModal.Show(salaries);
+    }
+    
+    private void UpdatePageSize(ChangeEventArgs e)
+    {
+        pageSize = int.Parse(e.Value.ToString());
+        totalPages = (int)Math.Ceiling((decimal)filteredSalaries.Count / pageSize);
+        currentPage = 1;
+    }
+    private void UpdateCurrentPage(int newPage)
+    {
+        currentPage = newPage;
+
+    }
+
+    private void FilterSalaries(ChangeEventArgs e)
+    {
+        search = e.Value.ToString();
+        var keywords = search.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                             .Select(k => k.Trim().ToLowerInvariant())
+                             .ToList();
+        filteredSalaries = allSalaries.Where(s => keywords.All(k =>
+                                                    s.Nom.ToLowerInvariant().Contains(k)
+                                                    || s.Prenom.ToLowerInvariant().Contains(k)
+                                                    || s.Email.ToLowerInvariant().Contains(k)
+                                                    || s.TelephoneFixe.ToLowerInvariant().Contains(k)
+                                                    || s.TelephonePortable.ToLowerInvariant().Contains(k)
+                                                    || s.Service.ToLowerInvariant().Contains(k)
+                                                    || s.Site.ToLowerInvariant().Contains(k))).ToList();
+        totalPages = (int)Math.Ceiling((decimal)filteredSalaries.Count / pageSize);
+        currentPage = 1;
+    }
+
+
+}

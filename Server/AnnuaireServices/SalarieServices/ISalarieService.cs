@@ -1,12 +1,10 @@
-using BlazorAnnuaireProject.AnnuaireServices.SiteService;
 using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Shared;
 
 namespace BlazorAnnuaireProject.AnnuaireServices.SalarieService;
 public interface ISalarieService
 {
-    Task<List<Salaries>> GetAllSalariesWithAssociations();
-    Task<List<Salaries>> GetAllSalaries();
-    Task<SalariesDto> GetSalariesById(int id);
+    Task<List<SalariesDto>> GetAllSalaries();
     Task<SalariesDto> GetSalariesByEmailWithAssociations(string email);
     Task<Salaries> GetSalariesByEmail(string email);
 

@@ -3,6 +3,7 @@ using BlazorAnnuaireProject.AnnuaireServices.SiteService;
 using BlazorAnnuaireProject.Context;
 using BlazorAnnuaireProject.Entities;
 using BlazorAnnuaireProject.Models;
+using BlazorAnnuaireProject.Shared;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -19,39 +20,28 @@ public class SalarieService : ISalarieService
         _mapper = mapper;
     }
 
-    public async Task<List<Salaries>> GetAllSalariesWithAssociations()
+
+
+    public async Task<List<SalariesDto>> GetAllSalaries()
     {
-        return await _context.Salaries.Include(s => s.Service).Include(s => s.Site).ToListAsync();
-    }
+        var salaries = await _context.Salaries
+            .Include(s => s.Service)
+            .Include(s => s.Site)
+            .Select(s => new SalariesDto
+            {
+                Id = s.Id,
+                Nom = s.Nom,
+                Prenom = s.Prenom,
+                Email = s.Email,
+                CreatedAt = s.CreatedAt,
+                TelephoneFixe = s.TelephoneFixe,
+                TelephonePortable = s.TelephonePortable,
+                Service = s.Service.Nom,
+                Site = s.Site.Ville
+            })
+            .ToListAsync();
 
-    public async Task<List<Salaries>> GetAllSalaries()
-    {
-        return await _context.Salaries.ToListAsync();
-    }
-
-
-
-    public async Task<SalariesDto> GetSalariesById(int id)
-    {
-
-        var salary = await _context.Salaries.Where(s => s.Id == id)
-        .Include(s => s.Service)
-          .Include(s => s.Site)
-          .Select(s => new SalariesDto
-          {
-              Id = s.Id,
-              Nom = s.Nom,
-              Prenom = s.Prenom,
-              Email = s.Email,
-              CreatedAt = s.CreatedAt,
-              TelephoneFixe = s.TelephoneFixe,
-              TelephonePortable = s.TelephonePortable,
-              Service = s.Service.Nom,
-              Site = s.Site.Ville
-          })
-          .FirstOrDefaultAsync();
-
-        return salary;
+        return salaries;
     }
 
     public async Task<SalariesDto> GetSalariesByEmailWithAssociations(string email)

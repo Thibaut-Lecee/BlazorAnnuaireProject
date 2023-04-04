@@ -9,7 +9,7 @@ public interface IAdminService
     CreateSalarieReponse CreateSalarie(RegisterRequestSalarie salarie);
     CreateSalarieReponse CreateSalarieOnService(RegisterRequestSalarie salarie, string Service);
     CreateSalarieReponse CreateSalarieOnServiceAndSite(RegisterRequestSalarie salarie, string Site, string Service);
-    UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie);
+    UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie, string email);
     Admin GetAdminByRefreshToken(string token);
 
     DeleteResponse DeleteSalarie(string email);

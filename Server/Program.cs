@@ -28,6 +28,7 @@ builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 //Db context
 builder.Services.AddDbContext<DataContext>(options =>
@@ -81,23 +82,23 @@ builder.Services.AddSwaggerGen(options =>
 
 
 });
-builder.Services.Configure<IdentityOptions>(
-    options => options.SignIn.RequireConfirmedEmail = true);
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        var value = builder.Configuration.GetSection("AppSettings:Secret").Value;
-        if (value != null)
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey =
-                    new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(value)),
-                ValidateIssuer = false,
-                ValidateAudience = false
-            };
-    });
+// builder.Services.Configure<IdentityOptions>(
+//     options => options.SignIn.RequireConfirmedEmail = true);
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//     .AddJwtBearer(options =>
+//     {
+//         var value = builder.Configuration.GetSection("AppSettings:Secret").Value;
+//         if (value != null)
+//             options.TokenValidationParameters = new TokenValidationParameters
+//             {
+//                 ValidateIssuerSigningKey = true,
+//                 IssuerSigningKey =
+//                     new SymmetricSecurityKey(
+//                         Encoding.UTF8.GetBytes(value)),
+//                 ValidateIssuer = false,
+//                 ValidateAudience = false
+//             };
+//     });
 
 
 builder.Services.AddCors(options =>
@@ -129,12 +130,20 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
+// JwtMiddleware
+app.UseCors();
+app.UseMiddleware<JwtMiddleware>();
+
+
+
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 app.MapRazorPages();
