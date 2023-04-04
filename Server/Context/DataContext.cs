@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using BlazorAnnuaireProject.Entities;
 using BlazorAnnuaireProject.Context.TypeConfigurations;
 using BlazorAnnuaireProject.Models;
+using BlazorAnnuaireProject.Shared.Entities;
+using BlazorAnnuaireProject.Shared;
 
 namespace BlazorAnnuaireProject.Context;
 

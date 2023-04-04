@@ -1,4 +1,6 @@
-using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Shared;
+using BlazorAnnuaireProject.Shared.Entities;
+
 namespace BlazorAnnuaireProject.Models;
 
 

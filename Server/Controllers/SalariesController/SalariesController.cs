@@ -1,10 +1,7 @@
 
-using BlazorAnnuaireProject.Entities;
 using Microsoft.AspNetCore.Mvc;
 using BlazorAnnuaireProject.AnnuaireServices.SalarieService;
 using BlazorAnnuaireProject.Context;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace BlazorAnnuaireProject.Controllers
 {
@@ -33,7 +30,7 @@ namespace BlazorAnnuaireProject.Controllers
             {
                 return NotFound();
             }
-            return Ok(salaries); 
+            return Ok(salaries);
         }
 
 

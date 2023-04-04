@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using BlazorAnnuaireProject.Context;
-using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Shared;
 using BlazorAnnuaireProject.Authorization;
 using Microsoft.Extensions.Options;
 using BlazorAnnuaireProject.Helpers;
 using BlazorAnnuaireProject.Models;
 using AutoMapper;
 using System.Net;
+using BlazorAnnuaireProject.Shared.Entities;
 
 namespace BlazorAnnuaireProject.AnnuaireServices.AdminService;
 public class AdminService : IAdminService
@@ -51,7 +52,7 @@ public class AdminService : IAdminService
 
         _context.SaveChanges();
 
-        return new AuthenticateResponse(admin, AccessToken.AccessToken, AccessToken.NewToken, AccessToken.AccessTokenExpires, AccessToken.NewTokenExpires);
+        return new AuthenticateResponse(admin, AccessToken.AccessToken, AccessToken.NewToken, AccessToken.AccessTokenExpires, AccessToken.NewTokenExpires, admin.Role.Name);
     }
 
     public CreateSalarieReponse CreateSalarie(RegisterRequestSalarie salarie)

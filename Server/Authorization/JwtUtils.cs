@@ -1,8 +1,7 @@
-using System.Security.Cryptography;
 using BlazorAnnuaireProject.Context;
-using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Shared;
 using BlazorAnnuaireProject.Helpers;
-using BlazorAnnuaireProject.Models;
+using BlazorAnnuaireProject.Shared.Entities;
 
 namespace BlazorAnnuaireProject.Authorization;
 
@@ -140,6 +139,7 @@ public class JwtUtils : IJwtUtils
             var tokenBdd = _context.RefreshToken.SingleOrDefault(r => r.AdminId == adminId);
 
             // return user id from JWT token if validation successful
+            Console.WriteLine("tokenBdd.AccessToken: " + tokenBdd.AccessToken);
             return tokenBdd.AccessToken;
         }
         catch

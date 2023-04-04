@@ -1,4 +1,5 @@
-using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Shared.Entities;
+
 namespace BlazorAnnuaireProject.Models
 {
     public class CreateSalarieReponse

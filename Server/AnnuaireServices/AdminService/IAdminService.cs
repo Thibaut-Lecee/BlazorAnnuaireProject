@@ -1,5 +1,7 @@
-using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Shared.Entities;
 using BlazorAnnuaireProject.Models;
+using BlazorAnnuaireProject.Shared;
+
 public interface IAdminService
 {
     Task<List<Admin>> GetAllAdmins();

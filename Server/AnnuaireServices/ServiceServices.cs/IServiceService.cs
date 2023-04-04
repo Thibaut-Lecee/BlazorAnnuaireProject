@@ -1,5 +1,5 @@
-using BlazorAnnuaireProject.Entities;
 using BlazorAnnuaireProject.Models;
+using BlazorAnnuaireProject.Shared.Entities;
 
 public interface IServiceService
 {

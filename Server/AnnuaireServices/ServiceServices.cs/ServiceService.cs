@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using BlazorAnnuaireProject.Context;
-using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Shared.Entities;
 using BlazorAnnuaireProject.Models;
 using AutoMapper;
-using BlazorAnnuaireProject.Helpers;
+using BlazorAnnuaireProject.Shared;
 
 namespace BlazorAnnuaireProject.AnnuaireServices.ServiceService;
 

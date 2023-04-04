@@ -1,6 +1,6 @@
-using BlazorAnnuaireProject.AnnuaireServices.SiteService;
-using BlazorAnnuaireProject.Entities;
 using BlazorAnnuaireProject.Models;
+using BlazorAnnuaireProject.Shared.Entities;
+
 public interface ISiteService
 {
 

@@ -1,14 +1,15 @@
-using BlazorAnnuaireProject.Entities;
 using Microsoft.EntityFrameworkCore;
 using BlazorAnnuaireProject.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using BlazorAnnuaireProject.Shared.Entities;
+
 namespace BlazorAnnuaireProject.Context.TypeConfigurations;
 class AdminEntityConfiguration : IEntityTypeConfiguration<Admin>
 {
     private readonly AdminConfiguration _adminConfig;
 
     // on crée un constructeur pour pouvoir injecter la configuration afin de cacher les données sensibles pour l'admin
-    public AdminEntityConfiguration(AdminConfiguration adminConfig) 
+    public AdminEntityConfiguration(AdminConfiguration adminConfig)
     {
         _adminConfig = adminConfig;
     }

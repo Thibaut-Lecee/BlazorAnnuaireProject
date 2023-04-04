@@ -1,4 +1,4 @@
-using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Shared.Entities;
 using BlazorAnnuaireProject.Context;
 using Microsoft.EntityFrameworkCore;
 using BlazorAnnuaireProject.Models;
@@ -20,10 +20,7 @@ public class SiteService : ISiteService
     }
 
 
-    public async Task<List<Site>> GetAllSites()
-    {
-        return await _context.Sites.ToListAsync();
-    }
+    public async Task<List<Site>> GetAllSites() => await _context.Sites.ToListAsync();
     public async Task<List<SiteWithSalariesDto>> GetAllSitesWithSalaries()
     {
         var sites = await _context.Sites

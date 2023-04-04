@@ -1,9 +1,10 @@
 namespace BlazorAnnuaireProject.Context.TypeConfigurations;
-using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Bogus;
 using System.Linq;
+using BlazorAnnuaireProject.Shared;
 
 public class ServicesEntityConfiguration : IEntityTypeConfiguration<Services>
 {

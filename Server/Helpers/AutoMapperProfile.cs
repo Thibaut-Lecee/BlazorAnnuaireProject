@@ -1,8 +1,10 @@
-using BlazorAnnuaireProject.Entities;
+using BlazorAnnuaireProject.Shared.Entities;
 using BlazorAnnuaireProject.Models;
 
 namespace BlazorAnnuaireProject.Helpers;
 using AutoMapper;
+using BlazorAnnuaireProject.Shared;
+
 public class AutoMapperProfile : Profile
 {
 

@@ -1,4 +1,3 @@
-using BlazorAnnuaireProject.Entities;
 using BlazorAnnuaireProject.Models;
 using Microsoft.Extensions.Options;
 using BlazorAnnuaireProject.Helpers;
@@ -6,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using BlazorAnnuaireProject.Authorization;
 using BlazorAnnuaireProject.Context;
 using Microsoft.AspNetCore.Authorization;
+using BlazorAnnuaireProject.Shared;
+using BlazorAnnuaireProject.Shared.Entities;
 
 namespace BlazorAnnuaireProject.Controllers
 {
@@ -36,7 +37,7 @@ namespace BlazorAnnuaireProject.Controllers
             if (response.RefreshToken != null)
             {
                 Console.WriteLine("RefreshToken: " + response.AccessToken);
-                SetTokenCookie(response.AccessToken, response.Id, response.RefreshToken, response.AccessTokenExpires, response.RefreshTokenExpires);
+                SetTokenCookie(response.AccessToken, response.Id, response.RefreshToken, response.AccessTokenExpires, response.RefreshTokenExpires, response.Role.Name);
             }
             return StatusCode(200, response);
         }
@@ -100,7 +101,7 @@ namespace BlazorAnnuaireProject.Controllers
             var refreshToken = Request.Cookies["refreshToken"];
             var admin = _adminService.GetAdminByRefreshToken(refreshToken);
             var newAccessToken = _jwtUtils.GenerateAccessToken(admin);
-            SetTokenCookie(newAccessToken.AccessToken, admin.RoleId, newAccessToken.NewToken, newAccessToken.AccessTokenExpires, newAccessToken.NewTokenExpires);
+            SetTokenCookie(newAccessToken.AccessToken, admin.RoleId, newAccessToken.NewToken, newAccessToken.AccessTokenExpires, newAccessToken.NewTokenExpires, admin.Role.Name);
             return StatusCode(200, newAccessToken);
         }
 
@@ -134,7 +135,7 @@ namespace BlazorAnnuaireProject.Controllers
 
 
 
-        private void SetTokenCookie(string token, int id, string refreshToken, DateTime tokenExpires, DateTime newTokenExpires)
+        private void SetTokenCookie(string token, int id, string refreshToken, DateTime tokenExpires, DateTime newTokenExpires, string role)
         {
             // append cookie with refresh token to the http response
 
@@ -153,6 +154,14 @@ namespace BlazorAnnuaireProject.Controllers
                 Expires = tokenExpires
             };
             Response.Cookies.Append("AccessToken", token, cookieOptions);
+
+            var cookieOptionsRole = new CookieOptions
+            {
+                HttpOnly = false,
+                Secure = true,
+                Expires = tokenExpires
+            };
+            Response.Cookies.Append("Role", role, cookieOptionsRole);
 
         }
 
