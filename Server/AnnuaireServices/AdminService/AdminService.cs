@@ -52,7 +52,7 @@ public class AdminService : IAdminService
 
         _context.SaveChanges();
 
-        return new AuthenticateResponse(admin, AccessToken.AccessToken, AccessToken.NewToken, AccessToken.AccessTokenExpires, AccessToken.NewTokenExpires, admin.Role.Name);
+        return new AuthenticateResponse(admin, AccessToken.AccessToken, AccessToken.NewToken, AccessToken.AccessTokenExpires, AccessToken.NewTokenExpires, admin.Role);
     }
 
     public CreateSalarieReponse CreateSalarie(RegisterRequestSalarie salarie)

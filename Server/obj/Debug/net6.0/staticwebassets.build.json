@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0M3s766bSE82hMA57W8xeZeDpepnT3MBiqK3F99GYMI=",
+  "Hash": "7ywZRbQSIO9u45autyUa71ndBhCAl0/mkYTfpP1YiNc=",
   "Source": "BlazorAnnuaireProject.Server",
   "BasePath": "_content/BlazorAnnuaireProject.Server",
   "Mode": "Default",
@@ -7439,6 +7439,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\index.html"
+    },
+    {
+      "Identity": "G:\\BlazorAnnuaireProject\\Client\\wwwroot\\js\\cookies.js",
+      "SourceId": "BlazorAnnuaireProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "G:\\BlazorAnnuaireProject\\Client\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "js/cookies.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\cookies.js"
     },
     {
       "Identity": "G:\\BlazorAnnuaireProject\\Server\\obj\\Debug\\net6.0\\scopedcss\\bundle\\BlazorAnnuaireProject.Server.styles.css",
