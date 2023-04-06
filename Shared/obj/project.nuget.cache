@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JQRA0anM32c1VQgHXu9r2g7yVupDu3iGHxdcPvsNlCPHHVDe94+ZfPL1jKervTfgpcKul+XdAmkLOW3SHIa7Bg==",
+  "dgSpecHash": "oj8fteGe7f+ymXU+yYHft560dMwrwl5vI23mBeFNMVFRUukigkSA/w1HMTCOesafUMICscdsCth7tySVztkmPA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj",
+  "projectFilePath": "G:\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

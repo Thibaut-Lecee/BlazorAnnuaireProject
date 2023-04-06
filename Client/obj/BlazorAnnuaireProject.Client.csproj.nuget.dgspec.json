@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj": {}
+    "G:\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj": {
+    "G:\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj",
+        "projectUniqueName": "G:\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj",
         "projectName": "BlazorAnnuaireProject.Client",
-        "projectPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj",
-        "packagesPath": "C:\\Users\\lecee\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\obj\\",
+        "projectPath": "G:\\BlazorAnnuaireProject\\Client\\BlazorAnnuaireProject.Client.csproj",
+        "packagesPath": "C:\\Users\\Thibaut\\.nuget\\packages\\",
+        "outputPath": "G:\\BlazorAnnuaireProject\\Client\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\lecee\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Thibaut\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -28,8 +32,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\lecee\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj": {
-                "projectPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj"
+              "G:\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj": {
+                "projectPath": "G:\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj"
               }
             }
           }
@@ -44,6 +48,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Blazored.LocalStorage": {
+              "target": "Package",
+              "version": "[4.3.0, )"
+            },
             "Blazored.Toast": {
               "target": "Package",
               "version": "[4.1.0, )"
@@ -56,6 +64,14 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.14, )"
+            },
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.2.2, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             }
           },
           "imports": [
@@ -72,7 +88,7 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[6.0.9, 6.0.9]"
+              "version": "[6.0.15, 6.0.15]"
             }
           ],
           "frameworkReferences": {
@@ -80,7 +96,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.104\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
@@ -89,17 +105,21 @@
         }
       }
     },
-    "C:\\Users\\lecee\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj": {
+    "G:\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj",
+        "projectUniqueName": "G:\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj",
         "projectName": "BlazorAnnuaireProject.Shared",
-        "projectPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj",
-        "packagesPath": "C:\\Users\\lecee\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Shared\\obj\\",
+        "projectPath": "G:\\BlazorAnnuaireProject\\Shared\\BlazorAnnuaireProject.Shared.csproj",
+        "packagesPath": "C:\\Users\\Thibaut\\.nuget\\packages\\",
+        "outputPath": "G:\\BlazorAnnuaireProject\\Shared\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\lecee\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Thibaut\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -140,7 +160,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.104\\RuntimeIdentifierGraph.json"
         }
       }
     }

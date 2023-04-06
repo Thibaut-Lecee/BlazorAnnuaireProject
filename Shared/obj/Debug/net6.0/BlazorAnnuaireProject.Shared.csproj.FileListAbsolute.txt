@@ -10,3 +10,15 @@ C:\Users\lecee\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\BlazorAnnuaireProje
 C:\Users\lecee\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\refint\BlazorAnnuaireProject.Shared.dll
 C:\Users\lecee\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\BlazorAnnuaireProject.Shared.pdb
 C:\Users\lecee\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\ref\BlazorAnnuaireProject.Shared.dll
+G:\BlazorAnnuaireProject\Shared\bin\Debug\net6.0\BlazorAnnuaireProject.Shared.deps.json
+G:\BlazorAnnuaireProject\Shared\bin\Debug\net6.0\BlazorAnnuaireProject.Shared.dll
+G:\BlazorAnnuaireProject\Shared\bin\Debug\net6.0\BlazorAnnuaireProject.Shared.pdb
+G:\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\BlazorAnnuaireProject.Shared.csproj.AssemblyReference.cache
+G:\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\BlazorAnnuaireProject.Shared.GeneratedMSBuildEditorConfig.editorconfig
+G:\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\BlazorAnnuaireProject.Shared.AssemblyInfoInputs.cache
+G:\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\BlazorAnnuaireProject.Shared.AssemblyInfo.cs
+G:\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\BlazorAnnuaireProject.Shared.csproj.CoreCompileInputs.cache
+G:\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\BlazorAnnuaireProject.Shared.dll
+G:\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\refint\BlazorAnnuaireProject.Shared.dll
+G:\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\BlazorAnnuaireProject.Shared.pdb
+G:\BlazorAnnuaireProject\Shared\obj\Debug\net6.0\ref\BlazorAnnuaireProject.Shared.dll

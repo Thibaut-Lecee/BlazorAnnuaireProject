@@ -69,7 +69,7 @@
 </table>
 
 </div> 
-<SalarieInfoModal @ref="salarieInfoModal" OnClose="ModalClosed" />
+<SalarieInfoModal @ref="salarieInfoModal" OnClose="ModalClosed" OnRefreshNeeded="RefreshData" />
 <Pager CurrentPage="currentPage" TotalPages="totalPages" OnPageChanged="UpdateCurrentPage" /> 
 
 @code {
@@ -93,6 +93,13 @@
         totalPages = (int)Math.Ceiling((decimal)allSalaries.Count / pageSize);
 
     }
+
+
+private async Task RefreshData()
+{
+    await OnInitializedAsync();
+}
+
 
     private void ModalClosed()
     {
@@ -123,14 +130,14 @@
         var keywords = search.Split(' ', StringSplitOptions.RemoveEmptyEntries)
                              .Select(k => k.Trim().ToLowerInvariant())
                              .ToList();
-        filteredSalaries = allSalaries.Where(s => keywords.All(k =>
-                                                    s.Nom.ToLowerInvariant().Contains(k)
-                                                    || s.Prenom.ToLowerInvariant().Contains(k)
-                                                    || s.Email.ToLowerInvariant().Contains(k)
-                                                    || s.TelephoneFixe.ToLowerInvariant().Contains(k)
-                                                    || s.TelephonePortable.ToLowerInvariant().Contains(k)
-                                                    || s.Service.ToLowerInvariant().Contains(k)
-                                                    || s.Site.ToLowerInvariant().Contains(k))).ToList();
+          filteredSalaries = allSalaries.Where(s => keywords.All(k =>
+                                                (s.Nom != null && s.Nom.ToLowerInvariant().Contains(k))
+                                                || (s.Prenom != null && s.Prenom.ToLowerInvariant().Contains(k))
+                                                || (s.Email != null && s.Email.ToLowerInvariant().Contains(k))
+                                                || (s.TelephoneFixe != null && s.TelephoneFixe.ToLowerInvariant().Contains(k))
+                                                || (s.TelephonePortable != null && s.TelephonePortable.ToLowerInvariant().Contains(k))
+                                                || (s.Service != null && s.Service.ToLowerInvariant().Contains(k))
+                                                || (s.Site != null && s.Site.ToLowerInvariant().Contains(k)))).ToList();
         totalPages = (int)Math.Ceiling((decimal)filteredSalaries.Count / pageSize);
         currentPage = 1;
     }

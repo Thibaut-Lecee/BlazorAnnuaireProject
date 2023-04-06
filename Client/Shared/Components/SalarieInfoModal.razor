@@ -1,4 +1,7 @@
-@using Blazored.Toast
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@using System.Net.Http.Headers
+@inject IToastService ToastService
 
 <div class="modal" tabindex="-1" style="display:@(IsOpen ? "block" : "none")">
     <div class="modal-dialog">
@@ -44,7 +47,7 @@
             <button type="button" class="btn btn-success" @onclick="UpdateSalarie" >Enregistrer</button>
             } else {
                 <button type="button" class="btn btn-warning" @onclick="UpdateSalarie">Modifier</button>
-                <button type="button" class="btn btn-danger">Supprimer</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteSalarieAsync">Supprimer</button>
                  <button type="button" class="btn btn-secondary" @onclick="Close">Fermer</button>
             }
             </div>
@@ -53,8 +56,10 @@
 </div>
 
 @code {
-    [Inject] private IToastService ToastService { get; set; }
+
     [Parameter] public SalariesDto? Salaries { get; set; }
+    [Parameter] public EventCallback OnRefreshNeeded { get; set; }
+
     [Parameter] public EventCallback<bool> OnClose { get; set; }
     public bool IsOpen { get; set; }
     public bool InputVisible { get; set; } = false;
@@ -66,15 +71,55 @@
         IsOpen = true;
         StateHasChanged();
    }
+private async Task<string> GetCookieValueAsync(string cookieName)
+{
+    return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
+}
 
- 
-            
+
      private void UpdateSalarie()
     {
                 InputVisible = !InputVisible;
     
     }
-   
+
+  private async Task DeleteSalarieAsync()
+{
+    if (Salaries?.Email != null)
+    {
+        string accessToken = await GetCookieValueAsync("AccessToken");
+
+        if (accessToken == null)
+        {
+            ToastService.ShowError("L'AccessToken est manquant");
+            return;
+        }
+
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"Auth/DeleteSalarie/{Salaries.Email}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        var response = await Http.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            ToastService.ShowSuccess("Le salarié a bien été supprimé");
+             await OnRefreshNeeded.InvokeAsync();
+            // Fermer le modal et rafraîchir la liste des salariés
+            await Close();
+            // Si vous avez une méthode pour charger les salariés, appelez-la ici
+            // par exemple : await LoadSalaries();
+        }
+        else
+        {
+            ToastService.ShowError("Erreur lors de la suppression du salarié");
+        }
+    }
+    else
+    {
+        ToastService.ShowError("L'adresse e-mail du salarié est manquante");
+    }
+}
+
 
     private async Task Close()
     {
