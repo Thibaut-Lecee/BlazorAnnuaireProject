@@ -136,7 +136,8 @@ public class AdminService : IAdminService
     public UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie, string email)
     {
         var existingSalarie = _context.Salaries.FirstOrDefault(s => s.Email == email);
-
+        Console.WriteLine(existingSalarie);
+        Console.WriteLine(email);
         if (existingSalarie == null)
         {
             throw new Exception("Salarie not found");

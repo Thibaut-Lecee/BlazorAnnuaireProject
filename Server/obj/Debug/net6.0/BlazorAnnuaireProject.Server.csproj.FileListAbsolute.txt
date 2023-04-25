@@ -262,3 +262,4 @@ G:\BlazorAnnuaireProject\Server\bin\Debug\net6.0\BlazorAnnuaireProject.xml
 C:\Users\lecee\BlazorAnnuaireProject\Server\bin\Debug\net6.0\Blazored.Toast.dll
 G:\BlazorAnnuaireProject\Server\bin\Debug\net6.0\Blazored.LocalStorage.dll
 G:\BlazorAnnuaireProject\Server\bin\Debug\net6.0\Blazored.Toast.dll
+C:\Users\lecee\BlazorAnnuaireProject\Server\bin\Debug\net6.0\Blazored.LocalStorage.dll
