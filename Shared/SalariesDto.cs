@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace BlazorAnnuaireProject.Shared
 {
     public class SalariesDto
@@ -5,6 +7,9 @@ namespace BlazorAnnuaireProject.Shared
         public int Id { get; set; }
         public string? Nom { get; set; }
         public string? Prenom { get; set; }
+
+        [Required(ErrorMessage = "L'email est obligatoire")]
+        [EmailAddress(ErrorMessage = "L'email n'est pas valide")]
         public string? Email { get; set; }
         public DateTime? CreatedAt { get; set; }
         public string? TelephoneFixe { get; set; }

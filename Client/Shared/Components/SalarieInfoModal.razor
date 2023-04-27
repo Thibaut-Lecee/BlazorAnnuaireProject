@@ -2,6 +2,8 @@
 @inject IJSRuntime JSRuntime
 @using System.Net.Http.Headers
 @inject IToastService ToastService
+@using System.Text.Json
+@using System.Net.Http.Json
 
 <div class="modal" tabindex="-1" style="display:@(IsOpen ? "block" : "none")">
     <div class="modal-dialog">
@@ -20,13 +22,13 @@
             @if (InputVisible == true)
             {
                 <div class="modal-body">
-                    <input type="text" class="form-control mt-2 mb-2" placeholder="@Salaries.Nom" />
-                    <input type="text" class="form-control mt-2 mb-2" placeholder="@Salaries.Prenom" />
-                    <input type="text" class="form-control mt-2 mb-2" placeholder="@Salaries.Email" />
-                    <input type="text" class="form-control mt-2 mb-2" placeholder="@Salaries.TelephoneFixe" />
-                    <input type="text" class="form-control mt-2 mb-2" placeholder="@Salaries.TelephonePortable" />
-                    <input type="text" class="form-control mt-2 mb-2" placeholder="@Salaries.Service" />
-                    <input type="text" class="form-control mt-2 mb-2" placeholder="@Salaries.Site" />
+                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Nom" />
+                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Prenom" />
+                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Email" />
+                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.TelephoneFixe" />
+                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.TelephonePortable" />
+                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Service" />
+                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Site" />
                 </div>
             } else {
              <div class="modal-body">
@@ -44,10 +46,13 @@
             
             <div class="modal-footer">
             @if(InputVisible == true){
-            <button type="button" class="btn btn-success" @onclick="UpdateSalarie" >Enregistrer</button>
-            } else {
-                <button type="button" class="btn btn-warning" @onclick="UpdateSalarie">Modifier</button>
+            <button type="button" class="btn btn-success" @onclick="UpdateSalarieAsync" >Enregistrer</button>
+            } 
+             @if(AccessToken != null) {
+                @if(InputVisible == false) {
+                <button type="button" class="btn btn-warning" @onclick="OnVisible">Modifier</button>
                 <button type="button" class="btn btn-danger" @onclick="DeleteSalarieAsync">Supprimer</button>
+                }
                  <button type="button" class="btn btn-secondary" @onclick="Close">Fermer</button>
             }
             </div>
@@ -63,6 +68,7 @@
     [Parameter] public EventCallback<bool> OnClose { get; set; }
     public bool IsOpen { get; set; }
     public bool InputVisible { get; set; } = false;
+    private string AccessToken { get; set; } = null;
 
     public void Show(SalariesDto salaries)
     {
@@ -71,17 +77,56 @@
         IsOpen = true;
         StateHasChanged();
    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AccessToken = await GetCookieValueAsync("AccessToken");
+        Console.WriteLine(AccessToken);
+    }
+
 private async Task<string> GetCookieValueAsync(string cookieName)
 {
     return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
 }
 
+private void OnVisible() {
+    InputVisible = !InputVisible;
+    StateHasChanged();
+}
 
-     private void UpdateSalarie()
-    {
-                InputVisible = !InputVisible;
+    private async Task UpdateSalarieAsync()
+{
     
+
+    string accessToken = await GetCookieValueAsync("AccessToken");
+    if (accessToken == null)
+    {
+        ToastService.ShowError("L'AccessToken est manquant");
+        InputVisible = false;
+        return;
     }
+
+    var request = new HttpRequestMessage(HttpMethod.Put, $"Auth/UpdateSalarie/{Salaries.Id}");
+    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+    // Sérialisez l'objet Salaries en JSON et ajoutez-le au corps de la requête
+    request.Content = JsonContent.Create(Salaries);
+
+    var response = await Http.SendAsync(request);
+    if (response.IsSuccessStatusCode)
+    {
+        ToastService.ShowSuccess("Le salarié a bien été modifié");
+        await OnRefreshNeeded.InvokeAsync();
+        await Close();
+        InputVisible = false;
+    }
+    else
+    {
+        await Close();
+        ToastService.ShowError("Erreur lors de la modification du salarié");
+    }
+}
+
 
   private async Task DeleteSalarieAsync()
 {
@@ -97,6 +142,7 @@ private async Task<string> GetCookieValueAsync(string cookieName)
 
         var request = new HttpRequestMessage(HttpMethod.Delete, $"Auth/DeleteSalarie/{Salaries.Email}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        request.Content = JsonContent.Create(Salaries);
 
         var response = await Http.SendAsync(request);
 

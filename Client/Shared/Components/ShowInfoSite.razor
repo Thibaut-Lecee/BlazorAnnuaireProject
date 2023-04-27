@@ -1,0 +1,152 @@
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@using System.Net.Http.Headers
+@inject IToastService ToastService
+@using System.Text.Json
+@using System.Net.Http.Json
+
+<div class="modal" tabindex="-1" style="display:@(IsOpen ? "block" : "none")">
+  <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Informations sur les sites</h5>
+                <button type="button" class="btn-close" @onclick="Close"></button>
+            </div>
+<div class="form-group d-flex justify-content-around align-items-center ">
+<div style="max-height: calc(90vh - 200px);
+    overflow-y: auto;
+    display: block;">
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ville</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+     <tbody>
+            @foreach (var site in allSites)
+            {
+                <tr>
+                   @if(SelectedSiteId == site.Id && InputVisible == true) {
+                    <td>
+            <input type="text" class="form-control mt-2 mb-2" @bind="site.Ville" placeholder="Ville" />
+                    </td>
+            <td>
+            <input type="text" class="form-control mt-2 mb-2" @bind="site.Description" placeholder="Description" />
+                    </td>
+        } else {
+                    <td>@site.Ville</td>
+                    <td>@site.Description</td>
+                    }
+                    <td class="col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex flex-row justify-content-around w-100 ">
+                        <button type="button" class="btn btn-outline-success btn-sm ms-1" @onclick="() => UpdateSiteAsync(site)" >Enregistrer</button>
+                       
+                        <button type="button" class="btn btn-outline-warning btn-sm ms-1" @onclick="() => EditSite(site.Id)">Modifier</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm ms-1" @onclick="() => DeleteSiteAsync(site)">Supprimer</button>
+                    </td>
+
+                </tr>
+            }
+     
+    </tbody> 
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+@code {
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+    private List<SiteWithServicesDto> allSites = new List<SiteWithServicesDto>();
+    private SiteWithServicesDto Site { get; set; } = new SiteWithServicesDto();
+    [Parameter] public EventCallback OnRefreshNeeded { get; set; }
+    private string AccessToken { get; set; } = null;
+    private bool IsOpen { get; set; }
+    private bool InputVisible { get; set; }
+private int? SelectedSiteId { get; set; }
+
+   
+    private async Task<string> GetCookieValueAsync(string cookieName)
+    {
+        return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
+    }
+
+    private async Task Close() {
+        IsOpen = false;
+        await OnClose.InvokeAsync(IsOpen);
+    }
+    public async void Show()
+    {
+        IsOpen = true;
+        AccessToken = await GetCookieValueAsync("AccessToken");
+        allSites = await Http.GetFromJsonAsync<List<SiteWithServicesDto>>("/Site");
+        await OnRefreshNeeded.InvokeAsync();
+        StateHasChanged();
+    }
+
+    private async Task DeleteSiteAsync(SiteWithServicesDto site) {
+        Console.WriteLine(site.Id);
+        
+            if(site.Id != null && AccessToken != null) {
+                var request = new HttpRequestMessage(HttpMethod.Delete, $"/Site/{site.Id}");
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                request.Content = JsonContent.Create(site);
+                var response = await Http.SendAsync(request);
+                if (response.IsSuccessStatusCode) {
+                    ToastService.ShowSuccess("Le site a bien été supprimé");
+                    await OnRefreshNeeded.InvokeAsync();
+                    await Close();
+                } else {
+                    ToastService.ShowError("Une erreur est survenue lors de la suppression du site");
+                }
+
+            }
+
+    }
+
+    private void EditSite(int siteId) {
+        Console.WriteLine(siteId);
+    SelectedSiteId = siteId;
+    InputVisible = !InputVisible;
+    StateHasChanged();
+}
+
+    private async Task UpdateSiteAsync(SiteWithServicesDto site) {
+           Console.WriteLine(site.Ville);
+        if(string.IsNullOrEmpty(site.Description))
+        {
+            var AccessToken = await GetCookieValueAsync("AccessToken");
+            if(string.IsNullOrEmpty(AccessToken)) {
+                ToastService.ShowError("Vous devez être connecté pour modifier un site");
+            }
+         
+            var request = new HttpRequestMessage(HttpMethod.Put, $"/Site/{site.Id}");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+            request.Content = JsonContent.Create(site);
+            var response = await Http.SendAsync(request);
+            if (response.IsSuccessStatusCode) {
+                InputVisible = !InputVisible;
+                ToastService.ShowSuccess("Le site a bien été modifié pour devenir " + site.Ville + "");
+                await OnRefreshNeeded.InvokeAsync();
+                await Close();
+            } else {
+                ToastService.ShowError("Une erreur est survenue lors de la modification du site");
+            }
+        } else {
+            var requestWithDescription = new HttpRequestMessage(HttpMethod.Put, $"/Site/{site.Id}");
+            requestWithDescription.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+            requestWithDescription.Content = JsonContent.Create(site);
+            var responseWithDescription = await Http.SendAsync(requestWithDescription);
+            if (responseWithDescription.IsSuccessStatusCode) {
+                ToastService.ShowSuccess("Le site a bien été modifié pour devenir " + site.Ville + "  " + site.Description);
+                await OnRefreshNeeded.InvokeAsync();
+                await Close();
+                InputVisible = !InputVisible;
+            } else {
+                ToastService.ShowError("Une erreur est survenue lors de la modification du site");
+            }
+        }
+    }
+
+}

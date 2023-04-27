@@ -17,3 +17,9 @@ public class SiteWithSalariesDto
     public List<ServiceDto> Services { get; set; }
 
 }
+
+public class SiteDto {
+    public int Id { get; set; }
+    public string Ville { get; set; }
+    public string Description { get; set; }
+}

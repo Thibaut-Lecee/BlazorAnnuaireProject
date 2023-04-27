@@ -1,0 +1,175 @@
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@using System.Net.Http.Headers
+@inject IToastService ToastService
+@using System.Text.Json
+@using System.Net.Http.Json
+
+<div class="modal" tabindex="-1" style="display:@(IsOpen ? "block" : "none")">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title">Création du salarié</h5>
+                <button type="button" class="btn-close" @onclick="Close"></button>
+            </div>
+            <EditForm Model="@Salaries" OnValidSubmit="AddSalaryAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+                <div class="modal-body">
+                     <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Nom" placeholder="Nom" />
+                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Prenom" placeholder="Prenom" />
+                    <input type="email" class="form-control mt-2 mb-2" @bind="@Salaries.Email" placeholder="Email"/>
+                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.TelephoneFixe" maxlength="10" placeholder="Telephone Fixe" />
+                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.TelephonePortable" maxlength="10" placeholder="Telephone Portable" />
+                     <select class="form-control mt-2 mb-2" @bind="@Salaries.Service" >
+        <option value="">Tous les services</option>
+        @foreach (var service in allServices) {
+            <option value="@service.Nom">@service.Nom</option>
+        }
+        
+    </select>
+                  <select class="form-control mt-2 " @bind="@Salaries.Site">
+        <option value="">Tous les sites</option>
+        @foreach (var site in allSites) {
+            <option value="@site.Ville">@site.Ville</option>
+        }
+    </select>
+                </div>  
+    <!-- Your input elements and buttons -->
+            
+            <div class="modal-footer">
+<button type="submit" class="btn btn-success">Enregistrer</button>
+    
+                 <button type="button" class="btn btn-secondary" @onclick="Close">Fermer</button>
+            
+            </div>
+</EditForm>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    [Parameter] public EventCallback OnRefreshNeeded { get; set; }
+    [Parameter] public SalariesDto Salaries { get; set; } = new SalariesDto();
+       private List<SiteWithServicesDto> allSites = new List<SiteWithServicesDto>();
+    private List<ServiceDto> allServices = new List<ServiceDto>();
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+    private string AccessToken { get; set; } = null;
+    private bool IsOpen { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+         allSites = await Http.GetFromJsonAsync<List<SiteWithServicesDto>>("/Site");
+        allServices = await Http.GetFromJsonAsync<List<ServiceDto>>("/Service");
+    }
+
+private static bool IsValidEmail(string email)
+{
+    if (string.IsNullOrWhiteSpace(email))
+    {
+        return false;
+    }
+
+    try
+    {
+        var regex = new System.Text.RegularExpressions.Regex(
+            @"^[\w!#$%&'*+\-/=?^_`{|}~]+(\.[\w!#$%&'*+\-/=?^_`{|}~]+)*" +
+            "@" +
+            @"((([\w]+([-\w]*[\w]+)*\.)+[a-zA-Z]{2,6})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$"
+        );
+        return regex.IsMatch(email);
+    }
+    catch (FormatException)
+    {
+        return false;
+    }
+}
+
+
+ private async Task Close()
+    {
+        IsOpen = false;
+        await OnClose.InvokeAsync(IsOpen);
+    }
+    public void Show()
+    {
+        IsOpen = true;
+        StateHasChanged();
+   }
+   private async Task<string> GetCookieValueAsync(string cookieName)
+{
+    return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
+}
+
+    private async Task AddSalaryAsync(EditContext editContext)
+    {
+         if (!editContext.Validate())
+    {
+        return;
+    }
+        if(Salaries.Nom == null || Salaries.Prenom == null || Salaries.Email == null || Salaries.TelephoneFixe == null || Salaries.TelephonePortable == null) {
+            ToastService.ShowError("Veuillez remplir le nom, prénom, email, téléphone fixe et portable ! ");
+            return;
+        }
+        AccessToken = await GetCookieValueAsync("AccessToken");
+        if(AccessToken == null) {
+            ToastService.ShowError("Vous n'avez pas d'accès pour faire cela !");
+            return;
+        }
+        if(Salaries.Nom.Length < 2 || Salaries.Prenom.Length < 2) {
+            ToastService.ShowError("Le nom et le prénom doivent faire au moins 2 caractères !");
+            return;
+        }
+        if(Salaries.TelephoneFixe.Length != 10 || Salaries.TelephonePortable.Length != 10) {
+            ToastService.ShowError("Le téléphone fixe et portable doivent faire 10 caractères !");
+            return;
+        }
+
+        if(!IsValidEmail(Salaries.Email)) {
+            ToastService.ShowError("L'email n'est pas valide !");
+            return;
+        }
+        if(Salaries.Service == null && Salaries.Site == null) {
+        var request = new HttpRequestMessage(HttpMethod.Post, "Auth/Register");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+        request.Content = JsonContent.Create(Salaries);
+        var response = await Http.SendAsync(request);
+        if(!response.IsSuccessStatusCode) {
+            ToastService.ShowError("Erreur lors de la création du salarié !");
+            return;
+        } else {
+            ToastService.ShowSuccess("Le salarié a bien été créé !");
+        } 
+        } else if(Salaries.Service != null && Salaries.Site == null) {
+                var requestService = new HttpRequestMessage(HttpMethod.Post, $"Auth/RegisterOnService/{Salaries.Service}");
+                requestService.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                requestService.Content = JsonContent.Create(Salaries);
+                var responseService = await Http.SendAsync(requestService);
+                if(!responseService.IsSuccessStatusCode) {
+                    ToastService.ShowError("Erreur lors de la création du salarié !");
+                    return;
+                } else {
+                    ToastService.ShowSuccess("Le salarié a bien été créé dans le service :" + Salaries.Service);
+                }
+        }  else {
+                    var requestServiceAndSite = new HttpRequestMessage(HttpMethod.Post, $"Auth/RegisterOnServiceAndSite/{Salaries.Site}/{Salaries.Service}");
+                    requestServiceAndSite.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                    requestServiceAndSite.Content = JsonContent.Create(Salaries);
+                    var responseServiceAndSite = await Http.SendAsync(requestServiceAndSite);
+                    if(!responseServiceAndSite.IsSuccessStatusCode) {
+                        ToastService.ShowError("Erreur lors de la création du salarié !");
+                        return;
+                    } else {
+                        ToastService.ShowSuccess("Le salarié a bien été créé dans le service :" + Salaries.Service + " et le site : " + Salaries.Site);
+                }
+        }
+        await OnRefreshNeeded.InvokeAsync();
+        await Close();
+}
+
+}

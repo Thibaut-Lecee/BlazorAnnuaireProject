@@ -1,12 +1,20 @@
 ﻿@inherits LayoutComponentBase
 @using Blazored.Toast.Configuration
+@inject IToastService ToastService
+@inject HttpClient Http
+@using System.Net.Http.Headers
+@inject IJSRuntime JSRuntime
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
     <main>
+   
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+             <button class="btn btn-outline-secondary" @onclick="Logout">
+                <span class="oi oi-account-login" aria-hidden="true"></span> Déconnexion
+            </button>
         </div>
 
         <article class="content px-4">
@@ -15,11 +23,36 @@
     </main>
 </div>
 <BlazoredToasts Position="ToastPosition.TopRight"
-                Timeout="15"
+                Timeout="5"
                 IconType="IconType.FontAwesome" 
                 SuccessClass="success-toast-override"
                 SuccessIcon="fa fa-thumbs-up"
                 ErrorIcon="fa fa-bug"/>
+
+@code {
+     private async Task<string> GetCookieValueAsync(string cookieName)
+    {
+        return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
+    }
+
+    private async Task Logout()
+    {
+        try {
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "/Auth/Logout");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetCookieValueAsync("refreshToken"));
+            var response = await Http.SendAsync(request);
+            if(response.IsSuccessStatusCode) {
+                ToastService.ShowSuccess("Déconnexion réussie");
+            } else {
+                ToastService.ShowError("Erreur lors de la déconnexion");
+            }
+            
+        } catch (Exception ex) {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}
 
 
 

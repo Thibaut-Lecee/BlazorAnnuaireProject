@@ -1,12 +1,16 @@
 @page "/salaries"
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
 
 <h3>Salaries</h3>
 
 <div class="form-group d-flex justify-content-around align-items-center ">
     <div>
     <input style="width:80px height:20px" @bind="search" @oninput="FilterSalaries" class="form-control" placeholder="Rechercher..." />
+        <button type="button" class="btn btn-outline-secondary mt-3 w-70 h-50" @onclick="() => ShowAddEmployee()">Ajouter un salarié</button>
+
     </div>
+    
 <div class="">
     <select class="form-control" @bind="search" @oninput="FilterSalaries">
         <option value="">Tous les sites</option>
@@ -14,9 +18,26 @@
             <option value="@site.Ville">@site.Ville</option>
         }
     </select>
+      <button type="button" class="btn btn-outline-secondary mt-3 w-70 h-50" @onclick="() => ShowAddSite()">Ajouter un Site</button>
+    <button type="button" class="btn btn-outline-info mt-3 w-70 h-50" @onclick="() => ShowInfoSite()">Voir les Sites</button>
+   
 </div>
 <div class="">
-    <label>Show:</label>
+    <select class="form-control" @bind="search" @oninput="FilterSalaries">
+        <option value="">Tous les services</option>
+        @foreach (var service in allServices) {
+            <option value="@service.Nom">@service.Nom</option>
+    
+        }
+    </select>
+        <button type="button" class="btn btn-outline-secondary mt-3 w-70 h-50" @onclick="() => ShowAddService()">Ajouter un Service</button>
+    <button type="button" class="btn btn-outline-info mt-3 w-70 h-50" @onclick="() => ShowInfoService()" >Voir les Services</button>
+
+</div>
+
+
+<div class="">
+    <label>Filter par :</label>
     <select @bind="pageSize" @oninput="UpdatePageSize">
         <option value="10">10</option>
         <option value="25">25</option>
@@ -38,8 +59,8 @@
             <th>Prenom</th>
             <th>Email</th>
             <th>CreatedAt</th>
-            <th>TelephoneFixe</th>
-            <th>TelephonePortable</th>
+            <th>Telephone Fixe</th>
+            <th>Telephone Portable</th>
             <th>Service</th>
             <th>Site</th>
             <th>Actions</th>
@@ -59,23 +80,29 @@
                     <td>@salary.Service</td>
                     <td>@salary.Site</td>
                     <td>
-                        <button type="button" class="btn btn-success" @onclick="() => ShowEmployeeInfo(salary)">Informations</button>
+                        <button type="button" class="btn btn-outline-info" @onclick="() => ShowEmployeeInfo(salary)">Informations</button>
                     </td>
-
                 </tr>
             }
-
     </tbody> 
 </table>
 
 </div> 
 <SalarieInfoModal @ref="salarieInfoModal" OnClose="ModalClosed" OnRefreshNeeded="RefreshData" />
+<SalarieAddModal @ref="salarieAddModal" OnClose="ModalClosed" OnRefreshNeeded="RefreshData" />
+<SiteAddModal @ref="siteAddModal" OnClose="ModalClosed" OnRefreshNeeded="RefreshData" />
+<ServiceAddModal @ref="serviceAddModal" OnClose="ModalClosed" OnRefreshNeeded="RefreshData" />
+<ShowInfoSite @ref="showInfoSite" OnClose="ModalClosed" OnRefreshNeeded="RefreshData" />
+<ShowInfoService @ref="showInfoService" OnClose="ModalClosed" OnRefreshNeeded="RefreshData" />
 <Pager CurrentPage="currentPage" TotalPages="totalPages" OnPageChanged="UpdateCurrentPage" /> 
+
+
 
 @code {
     private List<SalariesDto> allSalaries = new List<SalariesDto>();
     private List<SalariesDto> filteredSalaries = new List<SalariesDto>();
     private List<SiteWithServicesDto> allSites = new List<SiteWithServicesDto>();
+    private List<ServiceDto> allServices = new List<ServiceDto>();
   
     private string search = "";
     private int currentPage = 1;
@@ -83,15 +110,29 @@
     private int pageSize = 10;
 
     private SalarieInfoModal salarieInfoModal = new SalarieInfoModal();
+    private SalarieAddModal salarieAddModal = new SalarieAddModal();
+    private ServiceAddModal serviceAddModal = new ServiceAddModal();
+    private SiteAddModal siteAddModal = new SiteAddModal();
+    private ShowInfoService showInfoService = new ShowInfoService();
+    private ShowInfoSite showInfoSite = new ShowInfoSite();
+    private string AccessToken { get; set; } = null;
+
+
+    
+private async Task<string> GetCookieValueAsync(string cookieName)
+{
+    return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
+}
 
 
     protected override async Task OnInitializedAsync()
     {
         allSalaries = await Http.GetFromJsonAsync<List<SalariesDto>>("api/Salaries");
         allSites = await Http.GetFromJsonAsync<List<SiteWithServicesDto>>("/Site");
+        allServices = await Http.GetFromJsonAsync<List<ServiceDto>>("/Service");
         filteredSalaries = allSalaries;
         totalPages = (int)Math.Ceiling((decimal)allSalaries.Count / pageSize);
-
+        
     }
 
 
@@ -110,6 +151,31 @@ private async Task RefreshData()
    private void ShowEmployeeInfo(SalariesDto salaries)
     {
     salarieInfoModal.Show(salaries);
+    }
+
+    private void ShowAddEmployee()
+    {
+        salarieAddModal.Show();
+    }
+
+    private void ShowInfoService() {
+        showInfoService.Show();
+    }
+
+    private void ShowAddService() {
+        serviceAddModal.Show();
+    }
+
+    private void ShowAddSite() {
+     siteAddModal.Show();
+    }
+
+    private void ShowInfoSite() {
+        showInfoSite.Show();
+    }
+
+    private void ShowAllSites() {
+
     }
     
     private void UpdatePageSize(ChangeEventArgs e)

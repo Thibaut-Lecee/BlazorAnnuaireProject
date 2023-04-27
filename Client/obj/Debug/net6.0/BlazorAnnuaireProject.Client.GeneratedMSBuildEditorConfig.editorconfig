@@ -5,53 +5,79 @@ build_property.UsingMicrosoftNETSdkWeb =
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = false
 build_property.PlatformNeutralAssembly = 
-build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = browser
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = true
+build_property.IncludeAllContentForSelfExtract = 
 build_property.RootNamespace = BlazorAnnuaireProject.Client
 build_property.RootNamespace = BlazorAnnuaireProject.Client
-build_property.ProjectDir = g:\BlazorAnnuaireProject\Client\
+build_property.ProjectDir = C:\Users\lecee\BlazorAnnuaireProject\Client\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = g:\BlazorAnnuaireProject\Client
+build_property.MSBuildProjectDirectory = C:\Users\lecee\BlazorAnnuaireProject\Client
 build_property._RazorSourceGeneratorDebug = 
 
-[g:/BlazorAnnuaireProject/Client/App.razor]
+[C:/Users/lecee/BlazorAnnuaireProject/Client/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[g:/BlazorAnnuaireProject/Client/Pages/Index.razor]
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[g:/BlazorAnnuaireProject/Client/Pages/Login.razor]
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Pages/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[g:/BlazorAnnuaireProject/Client/Pages/Salaries.razor]
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Pages/Salaries.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2FsYXJpZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[g:/BlazorAnnuaireProject/Client/Shared/Components/Pager.razor]
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Shared/Components/Pager.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcUGFnZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[g:/BlazorAnnuaireProject/Client/Shared/Components/SalarieInfoModal.razor]
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Shared/Components/SalarieAddModal.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcU2FsYXJpZUFkZE1vZGFsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Shared/Components/SalarieInfoModal.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcU2FsYXJpZUluZm9Nb2RhbC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[g:/BlazorAnnuaireProject/Client/Shared/SurveyPrompt.razor]
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Shared/Components/ServiceAddModal.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcU2VydmljZUFkZE1vZGFsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Shared/Components/ShowInfoService.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcU2hvd0luZm9TZXJ2aWNlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Shared/Components/ShowInfoSite.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcU2hvd0luZm9TaXRlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Shared/Components/SiteAddModal.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcU2l0ZUFkZE1vZGFsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Shared/Components/ToastComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcVG9hc3RDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Shared/SurveyPrompt.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[g:/BlazorAnnuaireProject/Client/_Imports.razor]
+[C:/Users/lecee/BlazorAnnuaireProject/Client/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[g:/BlazorAnnuaireProject/Client/Shared/MainLayout.razor]
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-3hrase6cfe
 
-[g:/BlazorAnnuaireProject/Client/Shared/NavMenu.razor]
+[C:/Users/lecee/BlazorAnnuaireProject/Client/Shared/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-omor4kdbv2

@@ -25,9 +25,16 @@
     <button type="submit" class="btn btn-primary">Se connecter</button>
 </EditForm>
 
+<!-- <ToastComponent @ref="toastLog" /> -->
+
 @code 
 {
+    ToastComponent toastLog;
     private AuthenticateRequest loginModel = new AuthenticateRequest();
+
+    private async void ShowModal() {
+       toastLog.ShowToast();
+    }
 
     private async Task HandleLogin()
     {

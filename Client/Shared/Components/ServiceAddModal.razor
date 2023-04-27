@@ -1,0 +1,112 @@
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@using System.Net.Http.Headers
+@inject IToastService ToastService
+@using System.Text.Json
+@using System.Net.Http.Json
+
+<div class="modal" tabindex="-1" style="display:@(IsOpen ? "block" : "none")">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title">Création du Service</h5>
+                <button type="button" class="btn-close" @onclick="Close"></button>
+            </div>
+            <EditForm Model="@Service">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+                <div class="modal-body">
+                        <input type="text" class="form-control mb-1" placeholder="Nom du service" @bind="@Service.Nom" />
+                        <input type="text" class="form-control mt-1" placeholder="Ville" @bind="@Sites.Ville" />
+                </div>
+    <!-- Your input elements and buttons -->
+            
+            <div class="modal-footer">
+<button type="submit" class="btn btn-success" @onclick="() => AddServiceAsync()">Enregistrer</button>
+    
+                 <button type="button" class="btn btn-secondary" @onclick="Close">Fermer</button>
+            
+            </div>
+</EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+        [Parameter] public EventCallback<bool> OnClose { get; set; }
+      [Parameter] public EventCallback OnRefreshNeeded { get; set; }
+        [Parameter] public SiteDto Sites { get; set; } = new SiteDto();
+        [Parameter] public ServiceDto Service { get; set; } = new ServiceDto();
+
+    private string AccessToken { get; set; } = null;
+    private bool IsOpen { get; set; } = false;
+
+    private async Task<string> GetCookieValueAsync(string cookieName)
+    {
+        return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
+    }
+    private async Task AddServiceAsync()
+    {
+        Console.WriteLine("Ville : " + Sites.Ville);
+        Console.WriteLine("Description : " + Service.Nom);
+        if (Service.Nom == null || Service.Nom == "")
+        {
+            ToastService.ShowError("Veuillez saisir un nom de service");
+        }
+            AccessToken = await GetCookieValueAsync("AccessToken");
+            if (AccessToken == null)
+            {
+                ToastService.ShowError("Vous n'êtes pas connecté");
+            }
+              if (Sites.Ville != null && Sites.Ville != "")
+{
+    var requestServiceOnVille = new HttpRequestMessage(HttpMethod.Post, $"/Service/{Sites.Ville}");
+    requestServiceOnVille.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+    requestServiceOnVille.Content = JsonContent.Create(Service);
+    var responseServiceOnVille = await Http.SendAsync(requestServiceOnVille);
+    Console.WriteLine(responseServiceOnVille.IsSuccessStatusCode);
+    if (responseServiceOnVille.IsSuccessStatusCode)
+    {
+        ToastService.ShowSuccess("Service ajouté avec succès dans la ville de " + Sites.Ville + "");
+        await OnRefreshNeeded.InvokeAsync();
+      await  Close();
+    }
+    else
+    {
+        ToastService.ShowError("Une erreur est survenue dans la ville de " + Sites.Ville + "");
+    }
+}
+else
+{
+    var request = new HttpRequestMessage(HttpMethod.Post, "/Service");
+    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+    request.Content = JsonContent.Create(Service);
+    var response = await Http.SendAsync(request);
+    if (response.IsSuccessStatusCode)
+    {
+        ToastService.ShowSuccess("Service ajouté avec succès");
+        await OnRefreshNeeded.InvokeAsync();
+       await Close();
+    }
+    else
+    {
+        ToastService.ShowError("Une erreur est survenue");
+    }
+}
+    }
+
+
+     private async Task Close()
+    {
+        IsOpen = false;
+        await OnClose.InvokeAsync(IsOpen);
+    }
+    public void Show()
+    {
+        IsOpen = true;
+        StateHasChanged();
+   }
+}

@@ -1,0 +1,93 @@
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@using System.Net.Http.Headers
+@inject IToastService ToastService
+@using System.Text.Json
+@using System.Net.Http.Json
+
+<div class="modal" tabindex="-1" style="display:@(IsOpen ? "block" : "none")">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title">Création du Site</h5>
+                <button type="button" class="btn-close" @onclick="Close"></button>
+            </div>
+            <EditForm Model="@Sites" OnValidSubmit="AddSiteAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+                <div class="modal-body">
+                        <input type="text" class="form-control mb-1" placeholder="Nom du site" @bind="@Sites.Ville" />
+                        <input type="text" class="form-control mt-1" placeholder="Description" @bind="@Sites.Description" />
+                </div>
+    <!-- Your input elements and buttons -->
+            
+            <div class="modal-footer">
+<button type="submit" class="btn btn-success">Enregistrer</button>
+    
+                 <button type="button" class="btn btn-secondary" @onclick="Close">Fermer</button>
+            
+            </div>
+</EditForm>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+        [Parameter] public EventCallback<bool> OnClose { get; set; }
+        [Parameter] public SiteDto Sites { get; set; } = new SiteDto();
+        [Parameter] public EventCallback OnRefreshNeeded { get; set; }
+  private string AccessToken { get; set; } = null;
+    private bool IsOpen { get; set; } = false;
+private async Task<string> GetCookieValueAsync(string cookieName)
+{
+    return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
+}
+
+
+        private async Task AddSiteAsync() {
+            if(Sites.Ville == null || Sites.Ville == "" || Sites.Description == null || Sites.Description == "")
+            {
+                ToastService.ShowError("Veuillez saisir un nom de site et une description");
+            }
+            else
+            { 
+              AccessToken = await GetCookieValueAsync("AccessToken"); 
+              if(AccessToken == null) {
+                ToastService.ShowError("Vous n'êtes pas connecté");
+              }
+              else {
+                var request = new HttpRequestMessage(HttpMethod.Post, "/Site");
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                request.Content = JsonContent.Create(Sites);
+                var response = await Http.SendAsync(request);
+                if(response.IsSuccessStatusCode) {
+                    ToastService.ShowSuccess("Site ajouté");
+                    await OnRefreshNeeded.InvokeAsync();
+                    await Close();
+                }
+                else {
+                    ToastService.ShowError("Erreur lors de l'ajout du site");
+                }
+              }
+            }
+        }
+
+  
+
+ private async Task Close()
+    {
+        IsOpen = false;
+        await OnClose.InvokeAsync(IsOpen);
+    }
+    public void Show()
+    {
+        IsOpen = true;
+        StateHasChanged();
+   }
+
+}
