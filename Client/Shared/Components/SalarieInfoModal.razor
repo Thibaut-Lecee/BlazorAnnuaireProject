@@ -21,15 +21,36 @@
             </div>
             @if (InputVisible == true)
             {
+                  <EditForm Model="@Salaries" OnValidSubmit="UpdateSalarieAsync">
+            <!-- Ici on affiche alors les erreurs si y en a -->
+    <DataAnnotationsValidator />
+    <ValidationSummary />
                 <div class="modal-body">
                     <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Nom" />
                     <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Prenom" />
                     <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Email" />
-                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.TelephoneFixe" />
-                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.TelephonePortable" />
-                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Service" />
-                    <input type="text" class="form-control mt-2 mb-2" @bind="@Salaries.Site" />
+                    <input type="text" class="form-control mt-2 mb-2" maxlength="10" @bind="@Salaries.TelephoneFixe" />
+                    <input type="text" class="form-control mt-2 mb-2" maxlength="10" @bind="@Salaries.TelephonePortable" />
+                    <select class="form-control mt-2 mb-2" @bind="@Salaries.Service" >
+        <option value="">Tous les services</option>
+        @foreach (var service in allServices) {
+            <option value="@service.Nom">@service.Nom</option>
+        }
+        
+    </select>
+                  <select class="form-control mt-2 " @bind="@Salaries.Site">
+        <option value="">Tous les sites</option>
+        @foreach (var site in allSites) {
+            <option value="@site.Ville">@site.Ville</option>
+        }
+    </select>
                 </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Close">Fermer</button>
+                </div>
+            </EditForm>
+
             } else {
              <div class="modal-body">
                 <!-- Les informations du salarié seront ajoutées ici -->
@@ -40,20 +61,17 @@
                 <p>Téléphone fixe: @Salaries?.TelephoneFixe</p>
                 <p>Téléphone portable: @Salaries?.TelephonePortable</p>
                 <p>Service: @Salaries?.Service</p>
-                <p>Site: @Salaries?.Site</p> 
+                <p>Site: @Salaries?.Site</p>
             </div>
             }
             
             <div class="modal-footer">
-            @if(InputVisible == true){
-            <button type="button" class="btn btn-success" @onclick="UpdateSalarieAsync" >Enregistrer</button>
-            } 
              @if(AccessToken != null) {
                 @if(InputVisible == false) {
                 <button type="button" class="btn btn-warning" @onclick="OnVisible">Modifier</button>
                 <button type="button" class="btn btn-danger" @onclick="DeleteSalarieAsync">Supprimer</button>
                 }
-                 <button type="button" class="btn btn-secondary" @onclick="Close">Fermer</button>
+                 
             }
             </div>
         </div>
@@ -69,6 +87,8 @@
     public bool IsOpen { get; set; }
     public bool InputVisible { get; set; } = false;
     private string AccessToken { get; set; } = null;
+      private List<SiteWithServicesDto> allSites = new List<SiteWithServicesDto>();
+    private List<ServiceDto> allServices = new List<ServiceDto>();
 
     public void Show(SalariesDto salaries)
     {
@@ -82,6 +102,8 @@
     {
         AccessToken = await GetCookieValueAsync("AccessToken");
         Console.WriteLine(AccessToken);
+         allSites = await Http.GetFromJsonAsync<List<SiteWithServicesDto>>("/Site");
+        allServices = await Http.GetFromJsonAsync<List<ServiceDto>>("/Service");
     }
 
 private async Task<string> GetCookieValueAsync(string cookieName)

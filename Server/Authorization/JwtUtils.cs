@@ -199,11 +199,10 @@ public class JwtUtils : IJwtUtils
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(signingKey);
-        Console.WriteLine(key);
-        Console.WriteLine(token);
+    
         try
         {
-            Console.WriteLine("try");
+            
             var validationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
