@@ -55,6 +55,8 @@ public class AdminService : IAdminService
         return new AuthenticateResponse(admin, AccessToken.AccessToken, AccessToken.NewToken, AccessToken.AccessTokenExpires, AccessToken.NewTokenExpires, admin.Role);
     }
 
+
+
     public CreateSalarieReponse CreateSalarie(RegisterRequestSalarie salarie)
     {
         if (_context.Salaries.Any(s => s.Email == salarie.Email))
@@ -133,11 +135,11 @@ public class AdminService : IAdminService
         _context.SaveChanges();
         return new CreateSalarieReponse(registerSalarie);
     }
-    public UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie, string email)
+    public UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie, int salarieId)
     {
-        var existingSalarie = _context.Salaries.FirstOrDefault(s => s.Email == email);
+        var existingSalarie = _context.Salaries.FirstOrDefault(s => s.Id == salarieId);
         Console.WriteLine(existingSalarie);
-        Console.WriteLine(email);
+        Console.WriteLine(salarieId);
         if (existingSalarie == null)
         {
             throw new Exception("Salarie not found");
@@ -223,8 +225,5 @@ public class AdminService : IAdminService
         if (admin == null) throw new KeyNotFoundException("Tous les tokens sont expirés");
         return admin;
     }
-
-
-
 
 }

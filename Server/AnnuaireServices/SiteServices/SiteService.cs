@@ -158,6 +158,11 @@ public class SiteService : ISiteService
 
     public CreateSiteResponse CreateSite(CreateSiteRequest site)
     {
+        // Vérifiez si le site existe déjà
+        if (_context.Sites.Any(s => s.Ville == site.Ville))
+        {
+            throw new AppException(400, "Le site existe déjà");
+        }
         var register = _mapper.Map<Site>(site);
         _context.Sites.Add(register);
         _context.SaveChanges();
@@ -165,9 +170,9 @@ public class SiteService : ISiteService
         return new CreateSiteResponse(register);
     }
 
-    public UpdateResponse UpdateSite(UpdateRequest site, string ville)
+    public UpdateResponse UpdateSite(UpdateRequest site, int siteId)
     {
-        var existingSite = _context.Sites.FirstOrDefault(s => s.Ville == ville);
+        var existingSite = _context.Sites.Find(siteId);
         if (existingSite == null)
         {
             throw new AppException(400, "Le site n'a pas été trouvé");
@@ -207,9 +212,9 @@ public class SiteService : ISiteService
         }
     }
 
-    public DeleteResponse DeleteSite(string ville)
+    public DeleteResponse DeleteSite(int id)
     {
-        var site = _context.Sites.FirstOrDefault(s => s.Ville == ville);
+        var site = _context.Sites.FirstOrDefault(s => s.Id == id);
         if (site == null)
         {
             throw new AppException(400, "Le site n'a pas été trouvé");

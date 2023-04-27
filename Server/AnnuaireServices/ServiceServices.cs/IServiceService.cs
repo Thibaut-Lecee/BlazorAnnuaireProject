@@ -10,7 +10,7 @@ public interface IServiceService
     CreateServiceResponse CreateService(CreateServiceRequest service);
 
     CreateServiceResponse CreateServiceOnSite(CreateServiceRequest service, string Ville);
-    UpdateServiceResponse UpdateService(UpdateServiceRequest service, string nom);
+    UpdateServiceResponse UpdateService(UpdateServiceRequest service, int serviceId);
 
     DeleteServiceResponse DeleteService(string nom);
 }

@@ -17,6 +17,6 @@ public interface ISiteService
     Task<Site> GetSiteByName(string ville);
     CreateSiteResponse CreateSite(CreateSiteRequest site);
 
-    UpdateResponse UpdateSite(UpdateRequest site, string ville);
-    DeleteResponse DeleteSite(string ville);
+    UpdateResponse UpdateSite(UpdateRequest site, int siteId);
+    DeleteResponse DeleteSite(int id);
 }

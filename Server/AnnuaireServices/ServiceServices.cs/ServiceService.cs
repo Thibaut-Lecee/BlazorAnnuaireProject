@@ -30,6 +30,11 @@ public class ServiceService : IServiceService
 
     public CreateServiceResponse CreateService(CreateServiceRequest service)
     {
+        // vérifier si le service existe déjà
+        if (_context.Services.Any(s => s.Nom == service.Nom))
+        {
+            throw new Exception("Service already exists");
+        }
         var registerService = _mapper.Map<Services>(service);
         _context.Services.Add(registerService);
         _context.SaveChanges();
@@ -41,7 +46,15 @@ public class ServiceService : IServiceService
         var site = _context.Sites.FirstOrDefault(s => s.Ville == Ville);
         if (site == null)
         {
-            throw new Exception("Site not found");
+            site = new Site { Ville = Ville, Description = "Aucune description" };
+            _context.Entry(site).State = EntityState.Added;
+            _context.SaveChanges();
+
+        }
+        var serviceExist = _context.Services.FirstOrDefault(s => s.Nom == service.Nom);
+        if(serviceExist == null) {
+            serviceExist = _mapper.Map<Services>(service);
+            _context.Services.Add(serviceExist);
         }
 
         if (site.SiteAndServices == null)
@@ -51,20 +64,19 @@ public class ServiceService : IServiceService
 
         if (site.SiteAndServices.Any(s => s.Service.Nom == service.Nom))
         {
-            throw new Exception("Service already exists");
+            throw new Exception("Service on Site already exists");
         }
+      
+        site.SiteAndServices.Add(new SiteAndService { Site = site, Service = serviceExist });
 
-        var registerService = _mapper.Map<Services>(service);
-        _context.Services.Add(registerService);
-        site.SiteAndServices.Add(new SiteAndService { Site = site, Service = registerService });
         _context.Entry(site).State = EntityState.Modified;
         _context.SaveChanges();
-        return new CreateServiceResponse(registerService);
+        return new CreateServiceResponse(serviceExist);
     }
 
-    public UpdateServiceResponse UpdateService(UpdateServiceRequest service, string nom)
+    public UpdateServiceResponse UpdateService(UpdateServiceRequest service, int serviceId)
     {
-        var existingService = _context.Services.FirstOrDefault(s => s.Nom == nom);
+        var existingService = _context.Services.FirstOrDefault(s => s.Id == serviceId);
         if (existingService == null)
         {
             throw new Exception("Service not found");

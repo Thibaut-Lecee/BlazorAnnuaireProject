@@ -11,9 +11,8 @@ public interface IAdminService
     CreateSalarieReponse CreateSalarie(RegisterRequestSalarie salarie);
     CreateSalarieReponse CreateSalarieOnService(RegisterRequestSalarie salarie, string Service);
     CreateSalarieReponse CreateSalarieOnServiceAndSite(RegisterRequestSalarie salarie, string Site, string Service);
-    UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie, string email);
+    UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie, int salarieId);
     Admin GetAdminByRefreshToken(string token);
-
     DeleteResponse DeleteSalarie(string email);
 
 }

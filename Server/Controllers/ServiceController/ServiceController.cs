@@ -52,10 +52,10 @@ namespace BlazorAnnuaireProject.Controllers
         }
 
 
-        [HttpPut("{nom}")]
-        public IActionResult UpdateService([FromBody] UpdateServiceRequest service, string nom)
+        [HttpPut("{serviceId}")]
+        public IActionResult UpdateService([FromBody] UpdateServiceRequest service, int serviceId)
         {
-            var updateService = _serviceService.UpdateService(service, nom);
+            var updateService = _serviceService.UpdateService(service, serviceId);
             return StatusCode(201, new { message = "Service updated", updateService });
         }
 

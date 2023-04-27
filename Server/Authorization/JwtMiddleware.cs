@@ -25,9 +25,11 @@ namespace BlazorAnnuaireProject.Authorization
                 context.Request.Method == HttpMethods.Put ||
                 context.Request.Method == HttpMethods.Delete)
             {
+                
                 // Permettre RefreshToken même si le token n'est pas valide
-                if (context.Request.Path.Value.Contains("RefreshToken") || context.Request.Path.Value.Contains("Login"))
+                if (context.Request.Path.Value.Contains("Logout") || context.Request.Path.Value.Contains("Login"))
                 {
+                    
                     await _next(context);
                     return;
                 }

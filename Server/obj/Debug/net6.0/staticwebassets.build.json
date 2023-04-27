@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "wiDBuIyb+SeXhIQ+cKpogN/xnmxWPh4mugOKTKn08pI=",
+  "Hash": "RuAmRSeNn2wDm0Ebeb+hioEfuF0EsKFScfay6thdTzk=",
   "Source": "BlazorAnnuaireProject.Server",
   "BasePath": "_content/BlazorAnnuaireProject.Server",
   "Mode": "Default",
@@ -7439,6 +7439,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\index.html"
+    },
+    {
+      "Identity": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\wwwroot\\js\\BootStrap.js",
+      "SourceId": "BlazorAnnuaireProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "js/BootStrap.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\BootStrap.js"
     },
     {
       "Identity": "C:\\Users\\lecee\\BlazorAnnuaireProject\\Client\\wwwroot\\js\\cookies.js",

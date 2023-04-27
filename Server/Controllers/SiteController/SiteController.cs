@@ -96,26 +96,42 @@ namespace BlazorAnnuaireProject.Controllers
         [Description("Créer un site")]
         public IActionResult CreateSite([FromBody] CreateSiteRequest site)
         {
+            try {
+
             var newSite = _siteService.CreateSite(site);
+
             return StatusCode(201, new { message = "Site created", newSite });
+            } catch (Exception e) {
+                return StatusCode(500, new { message = "Erreur lors de la création du site", e });
+            }
         }
 
 
-        [HttpPut("{ville}")]
+        [HttpPut("{siteId}")]
         [Description("Mettre à jour un site par la ville")]
-        public IActionResult UpdateSite([FromBody] UpdateRequest site, string ville)
+        public IActionResult UpdateSite([FromBody] UpdateRequest site, int siteId)
         {
-            var newSite = _siteService.UpdateSite(site, ville);
+            try {
+            Console.WriteLine("siteId : " + site);
+            var newSite = _siteService.UpdateSite(site, siteId);
             return StatusCode(201, new { message = "Site updated", newSite });
+            } catch (Exception e) {
+                return StatusCode(500, new { message = "Erreur lors de la mise à jour du site", e });
+            }
         }
 
 
-        [HttpDelete("{ville}")]
+        [HttpDelete("{id}")]
         [Description("Supprimer un site par la ville")]
-        public IActionResult DeleteSite(string ville)
+        public IActionResult DeleteSite(int id)
         {
-            var removedSite = _siteService.DeleteSite(ville);
+             try {
+            var removedSite = _siteService.DeleteSite(id);
             return Ok(new { message = "Site deleted", removedSite });
+
+            } catch (Exception e) {
+                return StatusCode(500, new { message = "Erreur lors de la mise à jour du site", e });
+            }
         }
 
 
