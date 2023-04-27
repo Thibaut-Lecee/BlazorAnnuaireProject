@@ -6,6 +6,7 @@ using Bogus;
 using System.Linq;
 using BlazorAnnuaireProject.Shared;
 
+// Ici il y a toutes les configurations permettant de créer des données à rentrer dans la base de données 
 public class ServicesEntityConfiguration : IEntityTypeConfiguration<Services>
 {
     public void Configure(EntityTypeBuilder<Services> builder)
@@ -46,6 +47,7 @@ public class SalariesEntityConfiguration : IEntityTypeConfiguration<Salaries>
         builder.ToTable("Salaries");
         builder.HasKey(s => s.Id);
 
+    // Utilise faker par bogus pour créer des données aléatoires
         var faker = new Faker(locale: "fr");
 
         builder.HasData(Enumerable.Range(1, 1000).Select(i =>
@@ -77,6 +79,7 @@ public class SiteServiceEntityConfiguration : IEntityTypeConfiguration<SiteAndSe
     {
         builder.ToTable("SiteServices");
 
+// Table de jointure entre les sites et les services 
         builder.HasKey(ss => new { ss.SiteId, ss.ServiceId });
 
         builder.HasOne(ss => ss.Site)

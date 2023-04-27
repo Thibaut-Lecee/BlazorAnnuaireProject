@@ -1,5 +1,7 @@
 namespace BlazorAnnuaireProject.Helpers;
 
+
+// Permet de passer les données du fichier appsettings.json à l'application
 public class AppSettings
 {
     public string Secret { get; set; }

@@ -56,6 +56,7 @@
 @code {
     [Parameter] public int CurrentPage { get; set; }
     [Parameter] public int TotalPages { get; set; }
+    // Permet de déclencher un événement lorsqu'on change de page
     [Parameter] public EventCallback<int> OnPageChanged { get; set; }
     
 }

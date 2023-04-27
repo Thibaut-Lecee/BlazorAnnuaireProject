@@ -4,6 +4,7 @@
 @inject HttpClient Http
 @using System.Net.Http.Headers
 @inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
 
 <div class="page">
     <div class="sidebar">
@@ -34,22 +35,36 @@
     {
         return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
     }
+    private string AccessToken { get; set; }
+    private string Role { get; set; }
 
+    // Logout et redirection vers la page des salariés
     private async Task Logout()
     {
         try {
-
+            // On vérifie si on est connecté
+            AccessToken = await GetCookieValueAsync("AccessToken");
+            Role = await GetCookieValueAsync("Role");
+            if(AccessToken != null  && Role != null){
             var request = new HttpRequestMessage(HttpMethod.Post, "/Auth/Logout");
+            // On peut déconnecter seulement si on a un refresh token dans les cookies
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetCookieValueAsync("refreshToken"));
             var response = await Http.SendAsync(request);
             if(response.IsSuccessStatusCode) {
+                // Si la déconnexion est réussie, on redirige vers la page des salariés, on force le chargement de la page et on supprime les cookies
                 ToastService.ShowSuccess("Déconnexion réussie");
+                await JSRuntime.InvokeVoidAsync("AccessToken", "Role");
+                
             } else {
                 ToastService.ShowError("Erreur lors de la déconnexion");
             }
+            }
+            else {
+                ToastService.ShowError("Vous n'êtes pas connecté");
+            }
             
         } catch (Exception ex) {
-            Console.WriteLine(ex.Message);
+            ToastService.ShowError(ex.Message);
         }
     }
 }

@@ -45,13 +45,14 @@ public class AdminService : IAdminService
         if (admin == null) throw new AppException(400, "No admin found");
         Console.WriteLine(admin.PasswordHash, model.Password);
 
+        // décryptage du mot de passe et vérification
         if (!BCrypt.Net.BCrypt.Verify(model.Password, admin.PasswordHash))
             throw new AppException(400, "Password is incorrect");
 
         var AccessToken = _jwtUtils.GenerateAccessToken(admin);
 
         _context.SaveChanges();
-
+        // renvoie des données de l'utilisateur avec le token d'authentification
         return new AuthenticateResponse(admin, AccessToken.AccessToken, AccessToken.NewToken, AccessToken.AccessTokenExpires, AccessToken.NewTokenExpires, admin.Role);
     }
 
@@ -63,6 +64,8 @@ public class AdminService : IAdminService
         {
             throw new AppException(400, "Salarie already exists");
         }
+
+        // mappage de l'entité salarie à partir du modèle de requête et enregistrement dans la base de données
         var registerSalarie = _mapper.Map<Salaries>(salarie);
 
         _context.Salaries.Add(registerSalarie);
@@ -71,6 +74,8 @@ public class AdminService : IAdminService
     }
 
 
+
+    // permet de créer un salarié avec un service et un site existant dans la base de données
     public CreateSalarieReponse CreateSalarieOnServiceAndSite(RegisterRequestSalarie salarie, string Site, string Service)
     {
         if (_context.Salaries.Any(s => s.Email == salarie.Email))
@@ -135,6 +140,8 @@ public class AdminService : IAdminService
         _context.SaveChanges();
         return new CreateSalarieReponse(registerSalarie);
     }
+
+
     public UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie, int salarieId)
     {
         var existingSalarie = _context.Salaries.FirstOrDefault(s => s.Id == salarieId);
@@ -153,12 +160,6 @@ public class AdminService : IAdminService
                       s.Service.Id == service.Id &&
                       s.Site.Id == site.Id &&
                       (s.Nom == salarie.Nom || s.Prenom == salarie.Prenom || s.TelephoneFixe == salarie.TelephoneFixe || s.TelephonePortable == salarie.TelephonePortable));
-
-        // sinon on peut utiliser cette condition pour voir s'il y a un doublon dans toute la table salarié
-        // var duplicateSalarie = _context.Salaries
-        //     .Any(s => s.Id != existingSalarie.Id && // Ajout de cette condition pour exclure le salarié actuel
-        //     // on regarde si un salarié existe avec les mêmes informations que le salarié à modifier dans le service et le site spécifié
-        //               (s.Nom == salarie.Nom || s.Prenom == salarie.Prenom || s.TelephoneFixe == salarie.TelephoneFixe || s.TelephonePortable == salarie.TelephonePortable));
 
         if (duplicateSalarie)
         {
@@ -193,8 +194,6 @@ public class AdminService : IAdminService
         {
             existingSalarie.Site = _context.Sites.FirstOrDefault(s => s.Ville == salarie.Site) ?? existingSalarie.Site;
         }
-
-
         _context.Entry(existingSalarie).State = EntityState.Modified;
         _context.SaveChanges();
         return new UpdateSalarieResponse(existingSalarie);

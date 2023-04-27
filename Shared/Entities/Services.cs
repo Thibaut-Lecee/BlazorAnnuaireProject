@@ -4,7 +4,7 @@ namespace BlazorAnnuaireProject.Shared.Entities;
 
 public class Services
 {
-    [JsonIgnore] public int Id { get; set; }
+    public int Id { get; set; }
     public string Nom { get; set; }
 
     // association avec les salariés

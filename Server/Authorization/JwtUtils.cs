@@ -33,16 +33,17 @@ public class JwtUtils : IJwtUtils
 
     }
 
+    // Génère un token d'accès et un token de rafraîchissement et les stocke dans la base de données pour l'administrateur spécifié
     public RefreshToken GenerateAccessToken(Admin admin)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
-        // Crée un token d'accès valide pendant une heure
-
+        // Récupérer le rôle de l'administrateur pour le stocker dans le token
         var Role = _context.Roles.Include(r => r.Id).SingleOrDefault(r => r.Id == admin.AdminId).Name;
         Console.WriteLine("Role de l'utilisateur " + Role);
 
+        // Crée un token d'accès valide pendant 8 heures
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("id", admin.AdminId.ToString()), new Claim(ClaimTypes.Role, Role) }),
@@ -109,11 +110,14 @@ public class JwtUtils : IJwtUtils
     public string ValidateToken(string token)
     {
         var tokenValidation = _context.RefreshToken.SingleOrDefault(r => r.AccessToken == token);
-        // refreshToken exception ici peut poser problème
+
+        // si le token n'est pas valide car il n'est pas dans la base de données ou qu'il est expiré on renvoie une exception
+        // Il faudrait générer un code status 401 pour que le front puisse rediriger vers la page de connexion
         if (tokenValidation is null)
         {
             throw new Exception("Token invalide car c'est pas le bon");
         }
+
 
         var tokenHandler = new JwtSecurityTokenHandler();
         if (_appSettings.Secret is null)
@@ -138,7 +142,7 @@ public class JwtUtils : IJwtUtils
             var adminId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
             var tokenBdd = _context.RefreshToken.SingleOrDefault(r => r.AdminId == adminId);
 
-            // return user id from JWT token if validation successful
+            // retroune le token d'accès si la validation est réussie
             Console.WriteLine("tokenBdd.AccessToken: " + tokenBdd.AccessToken);
             return tokenBdd.AccessToken;
         }
@@ -149,6 +153,8 @@ public class JwtUtils : IJwtUtils
         }
     }
 
+
+    // Generation du token de rafraîchissement
     public RefreshToken GenerateRefreshToken(Admin admin)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -162,15 +168,18 @@ public class JwtUtils : IJwtUtils
     };
         var refreshToken = _context.RefreshToken.SingleOrDefault(r => r.AdminId == admin.AdminId);
 
-        // Generate refresh access token
+        // Genere un nouveau token d'accès valide pendant 8 heures
         var refreshAccessToken = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddHours(8),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
+
+        // on crée le token
         var newRefreshTokenAccess = tokenHandler.CreateToken(refreshAccessToken);
 
+        // on met à jour dans la base de donnée 
         var refreshTokenBdd = new RefreshToken
         {
             AccessToken = tokenHandler.WriteToken(newRefreshTokenAccess),
@@ -185,7 +194,7 @@ public class JwtUtils : IJwtUtils
     }
 
 
-
+    // Vérifie si le token est valide et retourne le principal de l'utilisateur si c'est le cas 
     public ClaimsPrincipal GetPrincipalFromToken(string token, string signingKey)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

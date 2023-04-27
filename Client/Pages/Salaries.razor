@@ -7,7 +7,10 @@
 <div class="form-group d-flex justify-content-around align-items-center ">
     <div>
     <input style="width:80px height:20px" @bind="search" @oninput="FilterSalaries" class="form-control" placeholder="Rechercher..." />
+    @if(AccessToken != null) {
+
         <button type="button" class="btn btn-outline-secondary mt-3 w-70 h-50" @onclick="() => ShowAddEmployee()">Ajouter un salarié</button>
+    }
 
     </div>
     
@@ -18,9 +21,10 @@
             <option value="@site.Ville">@site.Ville</option>
         }
     </select>
+    @if(AccessToken != null){
       <button type="button" class="btn btn-outline-secondary mt-3 w-70 h-50" @onclick="() => ShowAddSite()">Ajouter un Site</button>
     <button type="button" class="btn btn-outline-info mt-3 w-70 h-50" @onclick="() => ShowInfoSite()">Voir les Sites</button>
-   
+    }
 </div>
 <div class="">
     <select class="form-control" @bind="search" @oninput="FilterSalaries">
@@ -30,8 +34,10 @@
     
         }
     </select>
+    @if(AccessToken != null){
         <button type="button" class="btn btn-outline-secondary mt-3 w-70 h-50" @onclick="() => ShowAddService()">Ajouter un Service</button>
     <button type="button" class="btn btn-outline-info mt-3 w-70 h-50" @onclick="() => ShowInfoService()" >Voir les Services</button>
+    }
 
 </div>
 
@@ -99,6 +105,8 @@
 
 
 @code {
+
+    // les listes de class de notre dossier Shared (DTO) 
     private List<SalariesDto> allSalaries = new List<SalariesDto>();
     private List<SalariesDto> filteredSalaries = new List<SalariesDto>();
     private List<SiteWithServicesDto> allSites = new List<SiteWithServicesDto>();
@@ -109,6 +117,7 @@
     private int totalPages;
     private int pageSize = 10;
 
+    // Ici on déclare des variables de type Modal pour pouvoir les utiliser dans le code
     private SalarieInfoModal salarieInfoModal = new SalarieInfoModal();
     private SalarieAddModal salarieAddModal = new SalarieAddModal();
     private ServiceAddModal serviceAddModal = new ServiceAddModal();
@@ -118,30 +127,34 @@
     private string AccessToken { get; set; } = null;
 
 
-    
+
 private async Task<string> GetCookieValueAsync(string cookieName)
 {
     return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
 }
 
 
+        // A l'initialisation de la page on récupère les données de l'API
     protected override async Task OnInitializedAsync()
     {
         allSalaries = await Http.GetFromJsonAsync<List<SalariesDto>>("api/Salaries");
         allSites = await Http.GetFromJsonAsync<List<SiteWithServicesDto>>("/Site");
         allServices = await Http.GetFromJsonAsync<List<ServiceDto>>("/Service");
+        AccessToken = await GetCookieValueAsync("AccessToken");
         filteredSalaries = allSalaries;
         totalPages = (int)Math.Ceiling((decimal)allSalaries.Count / pageSize);
         
     }
 
 
+// permet de rafraichir les données de la page en cas de modification
 private async Task RefreshData()
 {
     await OnInitializedAsync();
 }
 
 
+        // On gère les modals ici avec la fermeture et l'ouverture 
     private void ModalClosed()
     {
         Console.WriteLine("Modal closed");
@@ -177,25 +190,34 @@ private async Task RefreshData()
     private void ShowAllSites() {
 
     }
-    
+
+
+    // Gères les pages du Pager ici
     private void UpdatePageSize(ChangeEventArgs e)
     {
         pageSize = int.Parse(e.Value.ToString());
         totalPages = (int)Math.Ceiling((decimal)filteredSalaries.Count / pageSize);
         currentPage = 1;
     }
+
     private void UpdateCurrentPage(int newPage)
     {
         currentPage = newPage;
 
     }
 
+    // Ici on filtre les salariés en fonctions des inputs dans le html 
+    // On a trois filtres un par site, l'autre par service et l'input de recherche permettant d'affiner la recherche
+
     private void FilterSalaries(ChangeEventArgs e)
-    {
+    { 
+        // Si la Trim méthode supprime des caractères de la instance actuelle, cette méthode ne modifie pas la valeur du instance actuel. Au lieu de cela, 
+        //il retourne une nouvelle chaîne dans laquelle tous les espaces blancs de début et de fin trouvés dans le instance actuel sont supprimés.
         search = e.Value.ToString();
         var keywords = search.Split(' ', StringSplitOptions.RemoveEmptyEntries)
                              .Select(k => k.Trim().ToLowerInvariant())
                              .ToList();
+            // keywords renvoie donc une list de string avec les mots clés de la recherche et on filtre ensuite les salariés en fonction de ces mots clés
           filteredSalaries = allSalaries.Where(s => keywords.All(k =>
                                                 (s.Nom != null && s.Nom.ToLowerInvariant().Contains(k))
                                                 || (s.Prenom != null && s.Prenom.ToLowerInvariant().Contains(k))

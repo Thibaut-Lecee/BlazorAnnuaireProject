@@ -3,6 +3,7 @@ namespace BlazorAnnuaireProject.Helpers;
 using System.Net;
 using System.Text.Json;
 
+// Ce middleware permet de gérer le type de réponse en fonction du type d'erreur rencontré par l'application
 public class ErrorHandlerMiddleware
 {
     private readonly RequestDelegate _next;

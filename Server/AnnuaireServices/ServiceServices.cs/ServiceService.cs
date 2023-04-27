@@ -35,6 +35,7 @@ public class ServiceService : IServiceService
         {
             throw new Exception("Service already exists");
         }
+        // mapper le service pour l'ajouter à la base de données 
         var registerService = _mapper.Map<Services>(service);
         _context.Services.Add(registerService);
         _context.SaveChanges();
@@ -87,6 +88,7 @@ public class ServiceService : IServiceService
         }
 
         bool updated = false;
+        // on évite de mettre à jour le service avec des valeurs null ou vides 
         if (!string.IsNullOrWhiteSpace(service.Nom) && !string.IsNullOrEmpty(service.Nom) && service.Nom != existingService.Nom && service.Nom != "string")
         {
             existingService.Nom = service.Nom;
@@ -120,6 +122,7 @@ public class ServiceService : IServiceService
         return new DeleteServiceResponse(infoRemoved, "Service deleted");
     }
 
+    // permet de vérifier si le service a des salariés associés 
     private bool SalariesOnServices(int serviceId)
     {
         var site = _context.Services.Include(s => s.Salaries).FirstOrDefault(s => s.Id == serviceId);

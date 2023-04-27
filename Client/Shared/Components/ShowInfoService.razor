@@ -27,11 +27,19 @@
             @foreach (var service in allServices)
             {
                 <tr>
-                    <td>@service.Nom</td>
-                   
+                     @if(SelectedServiceId == service.Id && InputVisible == true) {
                     <td>
-                        <button type="button" class="btn btn-success">Modifier</button>
-                        <button type="button" class="btn btn-danger" @onclick="() => DeleteSiteAsync(service)">Supprimer</button>
+            <input type="text" class="form-control mt-2 mb-2" @bind="service.Nom" placeholder="Nom" />
+                    </td>
+        } else {
+                    <td>@service.Nom</td>
+                    
+                    }
+                   
+                    <td class="col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex flex-row justify-content-around w-100 " >
+                        <button type="button" class="btn btn-outline-success btn-sm ms-1" @onclick="() => UpdateServiceAsync(service)">Enregistrer</button>
+                        <button type="button" class="btn btn-outline-warning  btn-sm ms-1" @onclick="() => EditService(service.Id)">Modifier</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm ms-1" @onclick="() => DeleteSiteAsync(service)">Supprimer</button>
                     </td>
 
                 </tr>
@@ -51,15 +59,24 @@
     [Parameter] public EventCallback OnRefreshNeeded { get; set; }
     private string AccessToken { get; set; } = null;
     private bool IsOpen { get; set; }
+    private bool InputVisible { get; set; } = false;
+    private int? SelectedServiceId { get; set; }
 
-   
+   // gérer les inputs comme dans le ShowSiteModal
+
     private async Task<string> GetCookieValueAsync(string cookieName)
     {
         return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
     }
 
+    private void EditService(int serviceId) {
+    SelectedServiceId = serviceId;
+    InputVisible = !InputVisible;
+    StateHasChanged();
+}
     private async Task Close() {
         IsOpen = false;
+        InputVisible = false;
         await OnClose.InvokeAsync(IsOpen);
     }
     public async void Show()
@@ -73,7 +90,9 @@
 
     private async Task DeleteSiteAsync(ServiceDto service) {
         Console.WriteLine(service.Nom);
-        
+            try {
+
+            
             if(service.Nom != null && AccessToken != null) {
                 var request = new HttpRequestMessage(HttpMethod.Delete, $"/Service/{service.Nom}");
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
@@ -88,10 +107,34 @@
                 }
 
             }
+        } catch (Exception e) {
+            Console.WriteLine(e.Message);
+            ToastService.ShowError(e.Message);
+        }
 
     }
 
-    private async Task UpdateServiceAsync() {
+    private async Task UpdateServiceAsync(ServiceDto service) {
+       try {
+ if (service.Nom != null && AccessToken != null) {
+
+            var request = new HttpRequestMessage(HttpMethod.Put, $"/Service/{service.Id}");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+            request.Content = JsonContent.Create(service);
+            var response = await Http.SendAsync(request);
+            if (response.IsSuccessStatusCode) {
+                ToastService.ShowSuccess("Le service a bien été modifié");
+                await OnRefreshNeeded.InvokeAsync();
+                InputVisible = false;
+                await Close();
+            } else {
+                ToastService.ShowError("Une erreur est survenue lors de la modification du service");
+            }
+        }
+       } catch (Exception e) {
+           Console.WriteLine(e.Message);
+           ToastService.ShowError("Une erreur est survenue lors de la modification du service");
+       }
         
     }
 

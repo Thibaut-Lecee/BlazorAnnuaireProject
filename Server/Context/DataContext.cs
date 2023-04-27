@@ -22,9 +22,8 @@ public class DataContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
+        // on ajoute la configuration pour le refresh token
         modelBuilder.Entity<Admin>().HasOne(u => u.RefreshToken).WithOne(rt => rt.Admin).HasForeignKey<RefreshToken>(rt => rt.AdminId).OnDelete(DeleteBehavior.Cascade);
-
         modelBuilder.ApplyConfiguration(new RoleEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ServicesEntityConfiguration());
         modelBuilder.ApplyConfiguration(new SitesEntityConfiguration());
@@ -41,6 +40,7 @@ public class DataContext : DbContext
 
     }
 
+    // Ici on déclare les différentes class pour set les tables dans la base de données
     public DbSet<Site> Sites { get; set; }
     public DbSet<Services> Services { get; set; }
     public DbSet<Role> Roles { get; set; }

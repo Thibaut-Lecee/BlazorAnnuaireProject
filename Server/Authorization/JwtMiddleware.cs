@@ -26,7 +26,7 @@ namespace BlazorAnnuaireProject.Authorization
                 context.Request.Method == HttpMethods.Delete)
             {
                 
-                // Permettre RefreshToken même si le token n'est pas valide
+                // Ici si le path contient Logout ou Login on ne vérifie pas l'AccessToken qui est obligatoire pour les requetes put, post et delete et certains get
                 if (context.Request.Path.Value.Contains("Logout") || context.Request.Path.Value.Contains("Login"))
                 {
                     
@@ -34,7 +34,7 @@ namespace BlazorAnnuaireProject.Authorization
                     return;
                 }
 
-                // Vérifier si la requête doit être authentifiée
+                // On récupère le token dans le header
                 var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
                 Console.WriteLine("JwtMiddleware: " + token);
                 if (string.IsNullOrEmpty(token))
@@ -43,6 +43,7 @@ namespace BlazorAnnuaireProject.Authorization
                     return;
                 }
 
+                // Vérifier si le token est valide
                 var accessToken = jwtUtils.ValidateToken(token);
                 if (accessToken == null)
                 {
@@ -62,6 +63,7 @@ namespace BlazorAnnuaireProject.Authorization
                 context.Items["Admin"] = admin;
             }
 
+            // On continue la requête
             await _next(context);
         }
     }

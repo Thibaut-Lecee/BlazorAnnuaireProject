@@ -25,46 +25,71 @@ namespace BlazorAnnuaireProject.Controllers
         [Description("Récupère tous les services sous forme de liste")]
         public async Task<IActionResult> GetAllServices()
         {
-            var services = await _serviceService.GetAllServices();
+           try {
+             var services = await _serviceService.GetAllServices();
 
             return Ok(services);
+           } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetServiceByVille(int id)
         {
-            var service = await _serviceService.GetServiceById(id);
+           try {
+             var service = await _serviceService.GetServiceById(id);
             return Ok(service);
+           } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
+
         }
 
         [HttpPost]
         public IActionResult CreateService([FromBody] CreateServiceRequest service)
         {
-            var newService = _serviceService.CreateService(service);
+            try {
+                var newService = _serviceService.CreateService(service);
             return StatusCode(201, new { message = "Service created", newService });
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost("{ville}")]
         public IActionResult CreateServiceOnSite([FromBody] CreateServiceRequest service, string ville)
         {
-            var newService = _serviceService.CreateServiceOnSite(service, ville);
+           try {
+             var newService = _serviceService.CreateServiceOnSite(service, ville);
             return StatusCode(201, new { message = "Service created", newService });
+           } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
 
 
         [HttpPut("{serviceId}")]
         public IActionResult UpdateService([FromBody] UpdateServiceRequest service, int serviceId)
         {
-            var updateService = _serviceService.UpdateService(service, serviceId);
+            try {
+                var updateService = _serviceService.UpdateService(service, serviceId);
             return StatusCode(201, new { message = "Service updated", updateService });
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
 
 
         [HttpDelete("{service}")]
         public IActionResult DeleteService(string service)
         {
-            var removedSite = _serviceService.DeleteService(service);
+            try {
+                var removedSite = _serviceService.DeleteService(service);
             return StatusCode(201, new { message = "Service deleted", removedSite });
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

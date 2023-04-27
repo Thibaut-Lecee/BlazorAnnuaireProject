@@ -32,7 +32,8 @@ namespace BlazorAnnuaireProject.Controllers
         [HttpPost("Login")]
         public IActionResult Login([FromBody] AuthenticateRequest model)
         {
-            var response = _adminService.Login(model);
+           try {
+             var response = _adminService.Login(model);
 
             if (response.RefreshToken != null)
             {
@@ -40,6 +41,9 @@ namespace BlazorAnnuaireProject.Controllers
                 SetTokenCookie(response.AccessToken, response.Id, response.RefreshToken, response.AccessTokenExpires, response.RefreshTokenExpires, response.Role);
             }
             return StatusCode(200, response);
+           } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
 
 
@@ -63,8 +67,12 @@ namespace BlazorAnnuaireProject.Controllers
         [HttpPost("RegisterOnService/{Service}")]
         public IActionResult RegisterOnService([FromBody] RegisterRequestSalarie request, string Service)
         {
-            var created = _adminService.CreateSalarieOnService(request, Service);
+            try {
+                var created = _adminService.CreateSalarieOnService(request, Service);
             return StatusCode(201, created);
+            } catch (AppException ex) {
+                return StatusCode(ex.HttpStatusCode, ex.Message);
+            }
         }
 
         [HttpPost("RegisterOnServiceAndSite/{Site}/{Service}")]
@@ -99,39 +107,55 @@ namespace BlazorAnnuaireProject.Controllers
         [HttpPost("RefreshToken")]
         public IActionResult RefreshToken()
         {
-            var refreshToken = Request.Cookies["refreshToken"];
+           try {
+             var refreshToken = Request.Cookies["refreshToken"];
             var admin = _adminService.GetAdminByRefreshToken(refreshToken);
             var newAccessToken = _jwtUtils.GenerateAccessToken(admin);
             SetTokenCookie(newAccessToken.AccessToken, admin.RoleId, newAccessToken.NewToken, newAccessToken.AccessTokenExpires, newAccessToken.NewTokenExpires, admin.Role);
             return StatusCode(200, newAccessToken);
+           } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete("DeleteSalarie/{email}")]
         public IActionResult DeleteSalarie(string email)
         {
-            _adminService.DeleteSalarie(email);
+            try {
+                _adminService.DeleteSalarie(email);
             return StatusCode(200, "Salarie deleted");
+            } catch (AppException ex) {
+                return StatusCode(ex.HttpStatusCode, ex.Message);
+            }
         }
 
         [HttpPost("Logout")]
         public IActionResult Logout()
         {
-            var refreshToken = Request.Cookies["refreshToken"];
+          try {
+              var refreshToken = Request.Cookies["refreshToken"];
             var admin = _adminService.GetAdminByRefreshToken(refreshToken);
             admin.RefreshToken = null;
             _context.SaveChanges();
             Response.Cookies.Delete("refreshToken");
             Response.Cookies.Delete("AccessToken");
             return StatusCode(200);
+          } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("GetAdmin")]
         [Authorize]
         public IActionResult GetAdmin()
         {
-            var token = Request.Cookies["AccessToken"];
+           try  {
+             var token = Request.Cookies["AccessToken"];
             var admin = CheckToken(token);
             return StatusCode(200, admin);
+           } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
 
 

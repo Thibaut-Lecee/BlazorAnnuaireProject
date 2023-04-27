@@ -43,13 +43,16 @@
         [Parameter] public EventCallback OnRefreshNeeded { get; set; }
   private string AccessToken { get; set; } = null;
     private bool IsOpen { get; set; } = false;
+
+    // permet de récupérer le token de l'utilisateur connecté 
 private async Task<string> GetCookieValueAsync(string cookieName)
 {
     return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
 }
 
-
+        // Ajout d'un site
         private async Task AddSiteAsync() {
+            try {
             if(Sites.Ville == null || Sites.Ville == "" || Sites.Description == null || Sites.Description == "")
             {
                 ToastService.ShowError("Veuillez saisir un nom de site et une description");
@@ -75,15 +78,20 @@ private async Task<string> GetCookieValueAsync(string cookieName)
                 }
               }
             }
+               } catch (Exception ex) {
+                ToastService.ShowError(ex.Message);
+            }
         }
 
   
-
+    // Fermeture de la modal
  private async Task Close()
     {
         IsOpen = false;
         await OnClose.InvokeAsync(IsOpen);
     }
+
+    // Ouverture de la modal
     public void Show()
     {
         IsOpen = true;

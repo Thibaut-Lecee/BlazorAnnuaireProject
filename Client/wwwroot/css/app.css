@@ -62,3 +62,21 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+    @keyframes fading-out {
+        0% {
+            opacity: 0;
+        }
+
+        5% {
+            opacity: 1;
+        }
+
+        75% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }

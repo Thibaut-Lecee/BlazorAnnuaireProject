@@ -3,7 +3,7 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
-
+@inject IToastService ToastService
 
 
 <h3>Connexion</h3>
@@ -48,10 +48,12 @@
                
                 // Redirigez l'utilisateur vers la page d'accueil ou une autre page après la connexion réussie
                 NavigationManager.NavigateTo("/salaries");
+                 ToastService.ShowSuccess("Vous êtes connecté");
             }
             else
             {
                 // Affichez une erreur si la connexion échoue
+                ToastService.ShowError("Erreur lors de la connexion" + response.StatusCode);
                 Console.WriteLine("Erreur lors de la connexion : " + response.StatusCode);
             }
         }
@@ -59,6 +61,7 @@
         {
             // Gérez les exceptions ici
             Console.WriteLine("Erreur : " + ex.Message);
+            ToastService.ShowError("Erreur lors de la connexion");
         }
     }
 }

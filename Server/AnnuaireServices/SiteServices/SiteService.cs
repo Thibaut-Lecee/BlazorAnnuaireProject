@@ -113,6 +113,7 @@ public class SiteService : ISiteService
     public async Task<List<SiteWithSalariesDto>> GetSiteByNameAndSalariesAndServices(string ville)
     {
 
+        // On récupère tous les sites avec les services et les salariés associés
         var sites = await _context.Sites
             .Where(s => s.Ville == ville)
             .Include(s => s.Salaries)
@@ -151,10 +152,6 @@ public class SiteService : ISiteService
         return sites;
 
     }
-
-
-
-
 
     public CreateSiteResponse CreateSite(CreateSiteRequest site)
     {
@@ -231,6 +228,7 @@ public class SiteService : ISiteService
     }
 
 
+    // permet de savoir si un site contient des salariés et ainsi renvoie un booléen
     private bool SalariesOnSite(int siteId)
     {
         Console.WriteLine(siteId);

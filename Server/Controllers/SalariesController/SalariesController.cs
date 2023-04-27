@@ -25,12 +25,16 @@ namespace BlazorAnnuaireProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllSalaries()
         {
-            var salaries = await _salarieService.GetAllSalaries();
+           try {
+             var salaries = await _salarieService.GetAllSalaries();
             if (salaries == null)
             {
                 return NotFound();
             }
             return Ok(salaries);
+           } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
 
 
@@ -38,14 +42,22 @@ namespace BlazorAnnuaireProject.Controllers
         [HttpGet("SalarieByEmail/{email}")]
         public async Task<IActionResult> GetSalarieByEmail(string email)
         {
-            var salarie = await _salarieService.GetSalariesByEmail(email);
+           try {
+             var salarie = await _salarieService.GetSalariesByEmail(email);
             return Ok(salarie);
+           } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
         [HttpGet("SalarieByEmailWithAssociations/{email}")]
         public async Task<IActionResult> GetSalarieByEmaildWithAssociations(string email)
         {
-            var salarie = await _salarieService.GetSalariesByEmailWithAssociations(email);
+           try {
+ var salarie = await _salarieService.GetSalariesByEmailWithAssociations(email);
             return Ok(salarie);
+           } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
     }
 

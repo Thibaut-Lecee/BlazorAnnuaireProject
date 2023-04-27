@@ -7,6 +7,7 @@ namespace BlazorAnnuaireProject.Shared.Entities;
 public class RefreshToken
 {
     [Key]
+    // Ignore la propriété Id lors de la sérialisation
     [JsonIgnore]
     public int Id { get; set; }
     public string AccessToken { get; set; }
@@ -23,4 +24,4 @@ public class RefreshToken
     public int AdminId { get; set; }
 
 
-} // navigation property
+} // End Class RefreshToken

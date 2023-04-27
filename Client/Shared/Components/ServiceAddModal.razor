@@ -61,6 +61,8 @@
             {
                 ToastService.ShowError("Vous n'êtes pas connecté");
             }
+
+            // Si la ville est renseignée, on ajoute le service dans la ville
               if (Sites.Ville != null && Sites.Ville != "")
 {
     var requestServiceOnVille = new HttpRequestMessage(HttpMethod.Post, $"/Service/{Sites.Ville}");
@@ -81,6 +83,7 @@
 }
 else
 {
+    // Si la ville n'est pas renseignée, on ajoute seulement service dans la base de données
     var request = new HttpRequestMessage(HttpMethod.Post, "/Service");
     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
     request.Content = JsonContent.Create(Service);

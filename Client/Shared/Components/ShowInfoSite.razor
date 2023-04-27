@@ -40,10 +40,10 @@
                     <td>@site.Description</td>
                     }
                     <td class="col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex flex-row justify-content-around w-100 ">
-                        <button type="button" class="btn btn-outline-success btn-sm ms-1" @onclick="() => UpdateSiteAsync(site)" >Enregistrer</button>
+                        <button type="button" class="btn btn-outline-success  ms-1" @onclick="() => UpdateSiteAsync(site)" >Enregistrer</button>
                        
-                        <button type="button" class="btn btn-outline-warning btn-sm ms-1" @onclick="() => EditSite(site.Id)">Modifier</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm ms-1" @onclick="() => DeleteSiteAsync(site)">Supprimer</button>
+                        <button type="button" class="btn btn-outline-warning  ms-1" @onclick="() => EditSite(site.Id)">Modifier</button>
+                        <button type="button" class="btn btn-outline-danger  ms-1" @onclick="() => DeleteSiteAsync(site)">Supprimer</button>
                     </td>
 
                 </tr>
@@ -105,6 +105,7 @@ private int? SelectedSiteId { get; set; }
 
     }
 
+    // On récupère l'id du site sélectionné et on affiche les champs de modification
     private void EditSite(int siteId) {
         Console.WriteLine(siteId);
     SelectedSiteId = siteId;
@@ -112,8 +113,11 @@ private int? SelectedSiteId { get; set; }
     StateHasChanged();
 }
 
+
     private async Task UpdateSiteAsync(SiteWithServicesDto site) {
            Console.WriteLine(site.Ville);
+           try {
+
         if(string.IsNullOrEmpty(site.Description))
         {
             var AccessToken = await GetCookieValueAsync("AccessToken");
@@ -147,6 +151,9 @@ private int? SelectedSiteId { get; set; }
                 ToastService.ShowError("Une erreur est survenue lors de la modification du site");
             }
         }
+    } catch (Exception e) {
+        Console.WriteLine(e.Message);
+    }
     }
 
 }
