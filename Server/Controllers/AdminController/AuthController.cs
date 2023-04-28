@@ -158,6 +158,39 @@ namespace BlazorAnnuaireProject.Controllers
             }
         }
 
+        [HttpDelete("DeleteAllSalaries")]
+        public IActionResult DeleteAllSalaries()
+        {
+            try {
+                _adminService.DeleteAllSalaries();
+            return StatusCode(200, "All Salaries deleted");
+            } catch (AppException ex) {
+                return StatusCode(ex.HttpStatusCode, ex.Message);
+            }
+        }
+
+        [HttpDelete("DeleteSalariesOnService/{serviceId}")]
+        public IActionResult DeleteSalariesOnService(int serviceId)
+        {
+            try {
+                _adminService.DeleteSalariesOnService(serviceId);
+            return StatusCode(200, "All Services deleted");
+            } catch (AppException ex) {
+                return StatusCode(ex.HttpStatusCode, ex.Message);
+            }
+        }
+
+        [HttpDelete("DeleteSalariesOnSite/{siteId}")]
+        public IActionResult DeleteSalariesOnSite(int siteId)
+        {
+            try {
+                _adminService.DeleteSalariesOnSite(siteId);
+            return StatusCode(200, "All Sites deleted");
+            } catch (AppException ex) {
+                return StatusCode(ex.HttpStatusCode, ex.Message);
+            }
+        }
+
 
 
         private void SetTokenCookie(string token, int id, string refreshToken, DateTime tokenExpires, DateTime newTokenExpires, Role role)

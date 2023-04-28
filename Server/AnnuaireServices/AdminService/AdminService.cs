@@ -225,4 +225,51 @@ public class AdminService : IAdminService
         return admin;
     }
 
+
+    public DeleteResponse DeleteSalariesOnService(int serviceId) {
+        var service = _context.Services.FirstOrDefault(s => s.Id == serviceId);
+        if (service == null)
+        {
+            throw new Exception("Service not found");
+        }
+        var removed = service.Nom;
+        _context.Services.Remove(service);
+        _context.SaveChanges();
+
+        return new DeleteResponse(removed, "Le service a été supprimé avec tous les salariés associés");
+    }
+
+    public DeleteResponse DeleteSalariesOnSite(int SiteId)
+    {
+        var site = _context.Sites.FirstOrDefault(s => s.Id == SiteId);
+        if (site == null)
+        {
+            throw new Exception("Site not found");
+        }
+        // il faut supprimer également les services associés au site
+        var services = _context.SiteAndServices.Where(s => s.Site.Id == SiteId);
+        foreach (var service in services)
+        {
+            _context.Services.Remove(service.Service);
+        }
+        var removed = site.Ville;
+        _context.Sites.Remove(site);
+        _context.SaveChanges();
+
+        return new DeleteResponse(removed, "Le site a été supprimé avec tous les services et salariés associés");
+}
+
+public DeleteResponse DeleteAllSalaries()
+{
+    var salaries = _context.Salaries;
+    foreach (var salarie in salaries)
+    {
+        _context.Salaries.Remove(salarie);
+    }
+    var removed = "Tous les salariés";
+    _context.SaveChanges();
+
+    return new DeleteResponse(removed, "ont été supprimés");
+}
+
 }

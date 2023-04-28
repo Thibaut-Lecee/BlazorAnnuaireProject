@@ -1,6 +1,8 @@
 @page "/salaries"
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
+@using System.Net.Http.Headers
+@inject IToastService ToastService
 
 <h3>Salaries</h3>
 
@@ -133,6 +135,37 @@ private async Task<string> GetCookieValueAsync(string cookieName)
     return await JSRuntime.InvokeAsync<string>("getCookie", cookieName);
 }
 
+private async Task DeleteCookie()
+{
+    if(AccessToken != null && await GetCookieValueAsync("refreshToken") != null){
+                    var request = new HttpRequestMessage(HttpMethod.Post, "/Auth/Logout");
+                      request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetCookieValueAsync("refreshToken"));
+            var response = await Http.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var NewAccessToken = new HttpRequestMessage(HttpMethod.Post, "/Auth/RefreshToken");
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetCookieValueAsync("refreshToken"));
+                var responseAccess = await Http.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    AccessToken = await GetCookieValueAsync("AccessToken");
+                    if(AccessToken != null){
+                        ToastService.ShowSuccess("Votre authentification a été réinitialisée");
+                    }
+                }
+
+                
+               ToastService.ShowSuccess("Votre authentification a été réinitialisée");
+            }
+            else
+            {
+                Console.WriteLine("Error");
+            }
+
+    }
+}
+
+
 
         // A l'initialisation de la page on récupère les données de l'API
     protected override async Task OnInitializedAsync()
@@ -143,6 +176,7 @@ private async Task<string> GetCookieValueAsync(string cookieName)
         AccessToken = await GetCookieValueAsync("AccessToken");
         filteredSalaries = allSalaries;
         totalPages = (int)Math.Ceiling((decimal)allSalaries.Count / pageSize);
+    
         
     }
 

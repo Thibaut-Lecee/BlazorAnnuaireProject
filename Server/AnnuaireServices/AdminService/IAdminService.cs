@@ -14,5 +14,8 @@ public interface IAdminService
     UpdateSalarieResponse UpdateSalarie(UpdateSalarieRequest salarie, int salarieId);
     Admin GetAdminByRefreshToken(string token);
     DeleteResponse DeleteSalarie(string email);
+    DeleteResponse DeleteSalariesOnService(int serviceId);
+    DeleteResponse DeleteSalariesOnSite(int siteId);
+    DeleteResponse DeleteAllSalaries();
 
 }
