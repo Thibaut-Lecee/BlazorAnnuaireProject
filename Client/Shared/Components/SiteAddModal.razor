@@ -61,7 +61,7 @@ private async Task<string> GetCookieValueAsync(string cookieName)
             { 
               AccessToken = await GetCookieValueAsync("AccessToken"); 
               if(AccessToken == null) {
-                ToastService.ShowError("Vous n'êtes pas connecté");
+                ToastService.ShowError("Vous n'êtes pas connectés");
               }
               else {
                 var request = new HttpRequestMessage(HttpMethod.Post, "/Site");
